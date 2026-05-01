@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="FinSage - AI-Powered Financial Freedom Platform">
-    <meta name="theme-color" content="#0f172a">
-    <title>FinSage | Financial Independence Platform</title>
+    <meta name="description" content="FinTech - Yapay Zeka Destekli Finansal Özgürlük Platformu">
+    <meta name="theme-color" content="#0a0f2c">
+    <title>FinTech | Finansal Özgürlük Platformu</title>
     
     <!-- Tailwind CSS + Fonts + Icons + Chart.js -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,24 +15,51 @@
     
     <style>
         * { font-family: 'Inter', sans-serif; }
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .card { background: white; border-radius: 1.5rem; transition: all 0.3s; border: 1px solid rgba(0,0,0,0.05); }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -12px rgba(0,0,0,0.15); }
-        .sidebar-link { transition: all 0.2s; cursor: pointer; border-radius: 0.75rem; }
-        .sidebar-link:hover { background: rgba(139,92,246,0.1); transform: translateX(4px); }
-        .active-page { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .btn-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transition: all 0.3s; }
-        .btn-gradient:hover { transform: scale(1.02); opacity: 0.9; }
+        body { background: #0a0f2c; }
+        
+        /* Altın Sarısı Renk Tanımları */
+        .text-gold { color: #f5b042; }
+        .border-gold { border-color: #f5b042; }
+        .bg-gold { background-color: #f5b042; }
+        .bg-gold-light { background: rgba(245, 176, 66, 0.1); }
+        .hover\:bg-gold:hover { background-color: #f5b042; }
+        .hover\:text-gold:hover { color: #f5b042; }
+        
+        .card {
+            background: #12173f;
+            border-radius: 1.5rem;
+            transition: all 0.3s;
+            border: 1px solid #1e2556;
+        }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -12px rgba(0,0,0,0.3); border-color: #f5b04230; }
+        
+        .sidebar-link {
+            transition: all 0.2s;
+            cursor: pointer;
+            border-radius: 0.75rem;
+        }
+        .sidebar-link:hover { background: rgba(245, 176, 66, 0.15); transform: translateX(4px); color: #f5b042; }
+        .active-page { background: linear-gradient(135deg, #f5b042 0%, #e09d2c 100%); color: #0a0f2c; }
+        .active-page i, .active-page span { color: #0a0f2c; }
+        
+        .btn-gold { background: linear-gradient(135deg, #f5b042 0%, #e09d2c 100%); transition: all 0.3s; color: #0a0f2c; font-weight: 600; }
+        .btn-gold:hover { transform: scale(1.02); opacity: 0.95; }
+        
+        .gradient-gold { background: linear-gradient(135deg, #f5b042 0%, #e09d2c 100%); }
+        
         .animate-fade-in { animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .glass-effect { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
-        .dark-mode { background: #0f172a; color: #f1f5f9; }
-        .dark-mode .card { background: #1e293b; color: #f1f5f9; }
-        .modal { transition: all 0.3s; }
+        
+        /* Scrollbar Stili */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e2556; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #f5b042; border-radius: 10px; }
+        
+        input, select, textarea { background: #0f1338; border: 1px solid #1e2556; color: white; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #f5b042; }
     </style>
 </head>
-<body class="font-sans antialiased" id="appBody">
+<body class="font-sans antialiased">
     <div id="root"></div>
 
     <script>
@@ -42,61 +69,51 @@
         
         let currentUser = null;
         let currentPage = 'dashboard';
-        let darkMode = localStorage.getItem('darkMode') === 'true';
         
-        // Sample Data (Structured for Production)
+        // Kullanıcı Verileri
         let users = [
-            { id: 1, email: 'demo@finsage.com', password: 'demo123', name: 'Alex Morgan', tier: 'pro', avatar: 'A', joined: '2024-01-15' }
+            { id: 1, email: 'admin@finsage.com', password: 'admin123', name: 'Orhan BOYRAZ', tier: 'premium', role: 'admin', avatar: 'O', phone: '0541 866 0202' }
         ];
         
+        // İşlemler
         let transactions = [
-            { id: 1, type: 'income', desc: 'Salary - Tech Corp', amount: 48500, date: '2024-05-01', category: 'salary' },
-            { id: 2, type: 'income', desc: 'Freelance Design', amount: 12500, date: '2024-04-28', category: 'freelance' },
-            { id: 3, type: 'income', desc: 'Dividend Payment', amount: 2150, date: '2024-04-15', category: 'investments' },
-            { id: 4, type: 'expense', desc: 'Mortgage/Rent', amount: 18500, date: '2024-04-25', category: 'housing' },
-            { id: 5, type: 'expense', desc: 'Groceries', amount: 4200, date: '2024-04-22', category: 'food' },
-            { id: 6, type: 'expense', desc: 'Transportation', amount: 2350, date: '2024-04-20', category: 'transport' },
-            { id: 7, type: 'expense', desc: 'Subscriptions', amount: 850, date: '2024-04-18', category: 'subscriptions' },
-            { id: 8, type: 'expense', desc: 'Dining Out', amount: 1800, date: '2024-04-16', category: 'lifestyle' }
+            { id: 1, type: 'income', desc: 'Maaş - Fansak', amount: 48500, date: '2024-05-01', category: 'salary' },
+            { id: 2, type: 'income', desc: 'Danışmanlık Geliri', amount: 12500, date: '2024-04-28', category: 'freelance' },
+            { id: 3, type: 'income', desc: 'Temettü Ödemesi', amount: 2150, date: '2024-04-15', category: 'investments' },
+            { id: 4, type: 'expense', desc: 'Ofis Kira', amount: 18500, date: '2024-04-25', category: 'housing' },
+            { id: 5, type: 'expense', desc: 'Personel Maaşları', amount: 32000, date: '2024-04-30', category: 'staff' }
         ];
         
+        // Yatırımlar
         let investments = [
-            { id: 1, name: 'S&P 500 ETF', symbol: 'SPY', type: 'stock', shares: 245, purchasePrice: 350, currentPrice: 412.5, value: 101062, change: 17.86 },
-            { id: 2, name: 'Bitcoin', symbol: 'BTC', type: 'crypto', shares: 0.85, purchasePrice: 35000, currentPrice: 48500, value: 41225, change: 38.57 },
-            { id: 3, name: 'Gold ETF', symbol: 'GLD', type: 'gold', shares: 50, purchasePrice: 420, currentPrice: 465, value: 23250, change: 10.71 },
-            { id: 4, name: 'Turkish Index', symbol: 'XU100', type: 'stock', shares: 1200, purchasePrice: 85, currentPrice: 97.5, value: 117000, change: 14.71 }
+            { id: 1, name: 'BIST 100 Endeksi', symbol: 'XU100', type: 'stock', value: 425000, change: 18.5 },
+            { id: 2, name: 'Bitcoin', symbol: 'BTC', type: 'crypto', value: 187500, change: 42.3 },
+            { id: 3, name: 'Emlak', symbol: 'Emlak', type: 'emlak', value: 928500, change: 12.7 },
+            { id: 3, name: 'Nakit', symbol: 'Nakit', type: 'nakit', value: 8500, change: 12.7 },
+            { id: 3, name: 'Girişim', symbol: 'Dükkan', type: 'dükkan', value: 198500, change: 12.7 },
+            { id: 3, name: 'Altın', symbol: 'GOLD', type: 'gold', value: 98500, change: 12.7 },
+            { id: 4, name: 'Amerikan Borsası', symbol: 'S&P500', type: 'stock', value: 312000, change: 15.2 }
         ];
         
+        // FIRE Hedefleri
         let fireGoals = [
-            { id: 1, name: 'Financial Independence', target: 7500000, current: 1250000, deadline: '2035-12-31', priority: 'high' },
-            { id: 2, name: 'Emergency Fund', target: 180000, current: 85000, deadline: '2024-12-31', priority: 'medium' }
+            { id: 1, name: 'Finansal Bağımsızlık', target: 15000000, current: 3250000, deadline: '2035-12-31' }
         ];
         
+        // Dijital Market Ürünleri
         let marketplaceProducts = [
-            { id: 1, name: 'FIRE Movement Masterclass', type: 'course', price: 299, sales: 234, rating: 4.8, image: '🎓' },
-            { id: 2, name: 'Passive Income Blueprint', type: 'ebook', price: 49, sales: 1890, rating: 4.6, image: '📘' },
-            { id: 3, name: '1-on-1 Financial Audit', type: 'consulting', price: 199, sales: 87, rating: 5.0, image: '🎯' }
+            { id: 1, name: 'FIRE Hareketi Masterclass', type: 'course', price: 299, sales: 234, rating: 4.9, image: '🎓', author: 'Orhan BOYRAZ' },
+            { id: 2, name: 'Pasif Gelir Mavi Kitap', type: 'ebook', price: 49, sales: 1890, rating: 4.8, image: '📘', author: 'Orhan BOYRAZ' },
+            { id: 3, name: '1-1 Finansal Danışmanlık', type: 'consulting', price: 199, sales: 87, rating: 5.0, image: '🎯', author: 'Orhan BOYRAZ' },
+            { id: 4, name: 'Dijital Varlık Yönetimi', type: 'course', price: 399, sales: 156, rating: 4.7, image: '💎', author: 'FinSage Ekibi' }
         ];
-        
-        let advisors = [
-            { id: 1, name: 'Sarah Chen', title: 'Senior Financial Planner', expertise: 'FIRE, Retirement', hourlyRate: 250, available: true },
-            { id: 2, name: 'Michael Rodriguez', title: 'Investment Strategist', expertise: 'Stocks, Crypto', hourlyRate: 200, available: true }
-        ];
-        
-        // AI Chatbot Knowledge Base
-        let chatbotResponses = {
-            'fire': 'Financial Independence Retire Early (FIRE) is a movement dedicated to extreme saving and investing to retire much earlier than traditional retirement age (typically 30s-50s).',
-            'invest': 'Based on your profile, consider diversifying with index funds (60%), crypto (15%), gold (10%), and keep 15% in high-yield savings for opportunities.',
-            'savings': 'With your current savings rate of 24%, you could reach FIRE in approximately 22 years. Increasing to 35% would reduce this to 14 years.',
-            'default': 'I can help with investment strategies, FIRE planning, savings optimization, and retirement calculators. What specific topic interests you?'
-        };
         
         // ============================================
         // 2. HELPER FUNCTIONS
         // ============================================
         
         function formatMoney(amount) {
-            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(amount);
+            return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 0 }).format(amount);
         }
         
         function calculateNetWorth() {
@@ -110,18 +127,12 @@
             let monthlyIncome = transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
             let monthlyExpense = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
             let savingsRate = (monthlyIncome - monthlyExpense) / monthlyIncome;
-            let investmentScore = investments.length * 10;
-            let debtScore = 25;
-            let savingsScore = savingsRate * 100;
-            let total = Math.min(100, Math.max(0, (savingsScore + investmentScore + debtScore) / 2.5));
-            return { score: Math.floor(total), grade: total > 80 ? 'Excellent' : total > 60 ? 'Good' : total > 40 ? 'Fair' : 'Needs Attention' };
+            let score = Math.min(100, Math.max(0, Math.floor(savingsRate * 100 + investments.length * 5)));
+            return { score, grade: score > 80 ? 'Mükemmel' : score > 60 ? 'İyi' : score > 40 ? 'Orta' : 'Geliştirilmeli' };
         }
         
         function getAIRecommendation() {
-            let savingsRate = (transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0) - transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0)) / transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
-            if (savingsRate < 0.2) return "📊 Increase savings rate to 20-30% by automating transfers to your investment account first.";
-            if (investments.length < 3) return "🎯 Diversify your portfolio. Consider adding international exposure and crypto for higher growth potential.";
-            return "🚀 You're on track! Focus on tax-advantaged accounts and rebalance quarterly to maintain your target allocation.";
+            return "📊 Altın Portföyünüzü çeşitlendirin. Uzun vadeli hedefleriniz için düzenli yatırım stratejisi uygulayın.";
         }
         
         // ============================================
@@ -132,18 +143,11 @@
             let user = users.find(u => u.email === email && u.password === password);
             if (user) {
                 currentUser = user;
-                localStorage.setItem('finsage_user', JSON.stringify({ id: user.id, name: user.name, email: user.email, tier: user.tier, avatar: user.avatar }));
+                localStorage.setItem('finsage_user', JSON.stringify(user));
                 renderApp();
                 return true;
             }
             return false;
-        }
-        
-        function handleRegister(name, email, password) {
-            if (users.find(u => u.email === email)) return false;
-            let newUser = { id: users.length + 1, email, password, name, tier: 'basic', avatar: name[0], joined: new Date().toISOString().split('T')[0] };
-            users.push(newUser);
-            return handleLogin(email, password);
         }
         
         function handleLogout() {
@@ -153,41 +157,66 @@
         }
         
         // ============================================
-        // 4. UI COMPONENTS (Modular)
+        // 4. FOOTER BİLGİLERİ (CFO. Orhan BOYRAZ)
+        // ============================================
+        
+        function renderFooter() {
+            return `
+                <footer class="bg-[#0a0f2c] border-t border-[#1e2556] py-8 mt-10">
+                    <div class="max-w-7xl mx-auto px-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-6">
+                            <div>
+                                <h3 class="text-gold font-bold text-lg mb-3">FinSage</h3>
+                                <p class="text-gray-400 text-sm">Yapay Zeka Destekli Finansal Özgürlük Platformu</p>
+                            </div>
+                            <div>
+                                <h3 class="text-gold font-bold text-lg mb-3">İletişim</h3>
+                                <p class="text-gray-400 text-sm flex items-center gap-2 mb-2"><i class="fab fa-whatsapp text-gold"></i> WhatsApp: 0541 866 0202</p>
+                                <p class="text-gray-400 text-sm flex items-center gap-2 mb-2"><i class="fas fa-phone text-gold"></i> Tel: 0541 866 0202</p>
+                                <p class="text-gray-400 text-sm flex items-center gap-2 mb-2"><i class="fas fa-envelope text-gold"></i> orhanboyraz0216@gmail.com</p>
+                            </div>
+                            <div>
+                                <h3 class="text-gold font-bold text-lg mb-3">Adres</h3>
+                                <p class="text-gray-400 text-sm">Agora Çarşısı No: Z/31</p>
+                                <p class="text-gray-400 text-sm">Nilüfer / BURSA</p>
+                            </div>
+                            <div>
+                                <h3 class="text-gold font-bold text-lg mb-3">Web & Sosyal</h3>
+                                <p class="text-gray-400 text-sm mb-2"><a href="https://anadolunetwork.tr" target="_blank" class="hover:text-gold transition">anadolunetwork.tr</a></p>
+                                <p class="text-gray-400 text-sm">CFO. Orhan BOYRAZ</p>
+                            </div>
+                        </div>
+                        <div class="pt-6 text-center text-gray-500 text-sm border-t border-[#1e2556]">
+                            <p>© 2024 FinTech - Tüm hakları saklıdır. | Eğitim ve bilgi amaçlıdır, yatırım tavsiyesi değildir.</p>
+                        </div>
+                    </div>
+                </footer>
+            `;
+        }
+        
+        // ============================================
+        // 5. UI COMPONENTS (Modüler)
         // ============================================
         
         function renderAuth() {
             return `
-                <div class="min-h-screen flex items-center justify-center p-4">
+                <div class="min-h-screen flex items-center justify-center p-4" style="background: linear-gradient(135deg, #0a0f2c 0%, #1a1f4a 100%);">
                     <div class="max-w-md w-full animate-fade-in">
                         <div class="text-center mb-8">
-                            <div class="gradient-bg w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                <i class="fas fa-chart-line text-white text-3xl"></i>
+                            <div class="gradient-gold w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                                <i class="fas fa-chart-line text-3xl text-white"></i>
                             </div>
                             <h1 class="text-4xl font-bold text-white mb-2">FinSage</h1>
-                            <p class="text-white/80">AI-Powered Financial Freedom Platform</p>
+                            <p class="text-gray-400">Yapay Zeka ile Finansal Bağımsızlık</p>
+                            <p class="text-gold text-sm mt-2">CFO. Orhan BOYRAZ</p>
                         </div>
-                        <div class="bg-white rounded-2xl shadow-xl p-8">
-                            <div class="flex gap-2 mb-6 border-b">
-                                <button id="loginTab" class="flex-1 py-3 font-semibold text-indigo-600 border-b-2 border-indigo-600">Sign In</button>
-                                <button id="registerTab" class="flex-1 py-3 font-semibold text-gray-500">Create Account</button>
-                            </div>
-                            <div id="loginForm">
-                                <form id="loginFormElement">
-                                    <input type="email" id="loginEmail" placeholder="Email address" class="w-full px-4 py-3 border rounded-xl mb-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="demo@finsage.com">
-                                    <input type="password" id="loginPassword" placeholder="Password" class="w-full px-4 py-3 border rounded-xl mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="demo123">
-                                    <button type="submit" class="w-full btn-gradient text-white py-3 rounded-xl font-semibold">Sign In →</button>
-                                </form>
-                            </div>
-                            <div id="registerForm" class="hidden">
-                                <form id="registerFormElement">
-                                    <input type="text" id="regName" placeholder="Full name" class="w-full px-4 py-3 border rounded-xl mb-3 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <input type="email" id="regEmail" placeholder="Email address" class="w-full px-4 py-3 border rounded-xl mb-3 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <input type="password" id="regPassword" placeholder="Password (min 6 characters)" class="w-full px-4 py-3 border rounded-xl mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <button type="submit" class="w-full btn-gradient text-white py-3 rounded-xl font-semibold">Create Free Account →</button>
-                                </form>
-                            </div>
-                            <p class="text-center text-gray-500 text-sm mt-6">Demo: demo@finsage.com / demo123</p>
+                        <div class="bg-[#12173f] rounded-2xl shadow-2xl p-8 border border-[#1e2556]">
+                            <form id="loginForm">
+                                <input type="email" id="loginEmail" placeholder="E-posta adresi" class="w-full px-4 py-3 rounded-xl mb-3 focus:ring-2 focus:ring-gold" value="admin@finsage.com">
+                                <input type="password" id="loginPassword" placeholder="Şifre" class="w-full px-4 py-3 rounded-xl mb-4 focus:ring-2 focus:ring-gold" value="admin123">
+                                <button type="submit" class="w-full btn-gold py-3 rounded-xl font-semibold">Giriş Yap →</button>
+                            </form>
+                            <p class="text-center text-gray-500 text-sm mt-6">Demo: admin@finsage.com / admin123</p>
                         </div>
                     </div>
                 </div>
@@ -196,44 +225,41 @@
         
         function renderSidebar() {
             return `
-                <aside class="fixed left-0 top-0 h-full w-72 bg-white dark:bg-gray-900 shadow-xl z-20 transition-all duration-300 overflow-y-auto">
+                <aside class="fixed left-0 top-0 h-full w-72 bg-[#0a0f2c] shadow-2xl z-20 overflow-y-auto border-r border-[#1e2556]">
                     <div class="p-6">
                         <div class="flex items-center gap-3 mb-8">
-                            <div class="gradient-bg w-10 h-10 rounded-xl flex items-center justify-center">
+                            <div class="gradient-gold w-10 h-10 rounded-xl flex items-center justify-center">
                                 <i class="fas fa-chart-line text-white text-lg"></i>
                             </div>
-                            <h1 class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">FinSage</h1>
+                            <h1 class="text-2xl font-bold text-gold">FinSage</h1>
                         </div>
                         <nav class="space-y-1">
                             ${[
-                                { id: 'dashboard', icon: 'fa-chart-pie', label: 'Dashboard' },
-                                { id: 'investments', icon: 'fa-chart-line', label: 'Investments' },
-                                { id: 'fire', icon: 'fa-fire', label: 'FIRE Planner' },
-                                { id: 'advisory', icon: 'fa-users', label: 'Advisory' },
-                                { id: 'marketplace', icon: 'fa-store', label: 'Marketplace' },
-                                { id: 'pricing', icon: 'fa-tag', label: 'Pricing' }
+                                { id: 'dashboard', icon: 'fa-chart-pie', label: 'Yönetim Paneli' },
+                                { id: 'investments', icon: 'fa-chart-line', label: 'Yatırımlar' },
+                                { id: 'fire', icon: 'fa-fire', label: 'FIRE Planlayıcı' },
+                                { id: 'digitalmarket', icon: 'fa-store', label: 'Dijital Market' },
+                                { id: 'advisory', icon: 'fa-users', label: 'Danışmanlık' },
+                                { id: 'pricing', icon: 'fa-tag', label: 'Ücretlendirme' }
                             ].map(item => `
-                                <div onclick="navigateTo('${item.id}')" class="sidebar-link flex items-center gap-3 px-4 py-3 ${currentPage === item.id ? 'active-page' : 'text-gray-600 dark:text-gray-300'}">
+                                <div onclick="navigateTo('${item.id}')" class="sidebar-link flex items-center gap-3 px-4 py-3 ${currentPage === item.id ? 'active-page' : 'text-gray-400'}">
                                     <i class="fas ${item.icon} w-5"></i>
                                     <span>${item.label}</span>
                                 </div>
                             `).join('')}
                         </nav>
-                        <div class="absolute bottom-0 left-0 right-0 p-6 border-t dark:border-gray-800">
+                        <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-[#1e2556]">
                             <div class="flex items-center gap-3 mb-4">
-                                <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                                    <span class="font-bold text-indigo-600">${currentUser?.name?.[0] || 'U'}</span>
+                                <div class="w-10 h-10 rounded-full bg-gold flex items-center justify-center">
+                                    <span class="font-bold text-[#0a0f2c]">${currentUser?.name?.[0] || 'O'}</span>
                                 </div>
                                 <div>
-                                    <p class="font-medium">${currentUser?.name || 'User'}</p>
-                                    <p class="text-xs text-gray-500 capitalize">${currentUser?.tier || 'basic'} Plan</p>
+                                    <p class="font-medium text-white">${currentUser?.name || 'Orhan BOYRAZ'}</p>
+                                    <p class="text-xs text-gold">CFO & Kurucu</p>
                                 </div>
                             </div>
-                            <button onclick="toggleDarkMode()" class="w-full mb-2 px-4 py-2 text-sm border rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800">
-                                <i class="fas ${darkMode ? 'fa-sun' : 'fa-moon'} mr-2"></i>${darkMode ? 'Light' : 'Dark'} Mode
-                            </button>
-                            <button onclick="handleLogout()" class="w-full px-4 py-2 text-sm text-red-600 border border-red-200 rounded-xl hover:bg-red-50">
-                                <i class="fas fa-sign-out-alt mr-2"></i>Sign Out
+                            <button onclick="handleLogout()" class="w-full px-4 py-2 text-sm text-red-400 border border-red-400/30 rounded-xl hover:bg-red-400/10 transition">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Çıkış Yap
                             </button>
                         </div>
                     </div>
@@ -247,30 +273,33 @@
             let monthlyIncome = transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
             let monthlyExpense = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
             let savings = monthlyIncome - monthlyExpense;
-            let savingsRate = ((savings / monthlyIncome) * 100).toFixed(1);
             
             setTimeout(() => {
                 let ctx = document.getElementById('trendChart')?.getContext('2d');
                 if (ctx) {
                     new Chart(ctx, {
                         type: 'line',
-                        data: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'], datasets: [{ label: 'Portfolio Value', data: [125000, 128500, 132000, 138000, 142500], borderColor: '#667eea', backgroundColor: 'rgba(102,126,234,0.1)', tension: 0.4, fill: true }] },
-                        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top' } } }
+                        data: { labels: ['Oca', 'Şub', 'Mar', 'Nis', 'May'], datasets: [{ label: 'Portföy Değeri (₺)', data: [2850000, 2980000, 3120000, 3250000, 3420000], borderColor: '#f5b042', backgroundColor: 'rgba(245,176,66,0.1)', tension: 0.4, fill: true }] },
+                        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { color: '#f5b042' } } } }
                     });
                 }
             }, 100);
             
             return `
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="card p-6"><p class="text-gray-500 text-sm">Net Worth</p><h2 class="text-3xl font-bold mt-2">${formatMoney(netWorth)}</h2><p class="text-emerald-600 text-sm mt-1"><i class="fas fa-arrow-up"></i> +12.4% vs last month</p></div>
-                    <div class="card p-6"><p class="text-gray-500 text-sm">Monthly Cash Flow</p><h2 class="text-3xl font-bold mt-2">${formatMoney(monthlyIncome)} <span class="text-base font-normal text-gray-400">/ ${formatMoney(monthlyExpense)}</span></h2><p class="text-indigo-600 text-sm mt-1">Savings: ${formatMoney(savings)} (${savingsRate}%)</p></div>
-                    <div class="card p-6"><p class="text-gray-500 text-sm">Financial Health Score</p><div class="flex justify-between items-center mt-2"><div><h2 class="text-4xl font-bold text-indigo-600">${health.score}</h2><p class="text-emerald-600 text-sm">${health.grade}</p></div><div class="w-20 h-20 rounded-full border-4 border-indigo-200 flex items-center justify-center"><span class="text-2xl font-bold text-indigo-600">${health.score}</span></div></div></div>
+                    <div class="card p-6"><p class="text-gray-500 text-sm">Toplam Net Varlık</p><h2 class="text-3xl font-bold text-gold mt-2">${formatMoney(netWorth)}</h2><p class="text-emerald-500 text-sm mt-1"><i class="fas fa-arrow-up"></i> +%12.4</p></div>
+                    <div class="card p-6"><p class="text-gray-500 text-sm">Aylık Nakit Akışı</p><h2 class="text-3xl font-bold text-gold mt-2">${formatMoney(monthlyIncome)} <span class="text-base font-normal text-gray-400">/ ${formatMoney(monthlyExpense)}</span></h2><p class="text-emerald-500 text-sm mt-1">Birikim: ${formatMoney(savings)}</p></div>
+                    <div class="card p-6"><p class="text-gray-500 text-sm">Finansal Sağlık Skoru</p><div class="flex justify-between items-center mt-2"><div><h2 class="text-4xl font-bold text-gold">${health.score}</h2><p class="text-emerald-500 text-sm">${health.grade}</p></div><div class="w-20 h-20 rounded-full border-4 border-gold/50 flex items-center justify-center"><span class="text-2xl font-bold text-gold">${health.score}</span></div></div></div>
                 </div>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                    <div class="card p-6"><h3 class="font-semibold text-lg mb-4">Portfolio Performance</h3><canvas id="trendChart" height="200"></canvas></div>
-                    <div class="card p-6"><h3 class="font-semibold text-lg mb-4">AI Insight</h3><div class="bg-indigo-50 dark:bg-indigo-950/30 p-4 rounded-xl mb-4"><p class="text-indigo-800 dark:text-indigo-300"><i class="fas fa-robot mr-2"></i>${getAIRecommendation()}</p></div><h3 class="font-semibold text-lg mb-3 mt-4">Recent Transactions</h3>${transactions.slice(0, 4).map(t => `<div class="flex justify-between py-2 border-b"><span><i class="fas ${t.type === 'income' ? 'fa-arrow-up text-emerald-500' : 'fa-arrow-down text-red-500'} mr-2"></i>${t.desc}</span><span class="${t.type === 'income' ? 'text-emerald-500' : 'text-red-500'}">${t.type === 'income' ? '+' : '-'}${formatMoney(t.amount)}</span></div>`).join('')}</div>
+                    <div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">Portföy Performansı</h3><canvas id="trendChart" height="200"></canvas></div>
+                    <div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">Yapay Zeka Analizi</h3><div class="bg-gold-light p-4 rounded-xl mb-4"><p class="text-gold"><i class="fas fa-robot mr-2"></i>${getAIRecommendation()}</p></div><div class="space-y-3"><div class="flex justify-between p-3 bg-gold-light rounded-xl"><span class="text-gray-300">Aylık Yatırım Hedefi</span><span class="text-gold font-semibold">${formatMoney(25000)}</span></div><div class="flex justify-between p-3 bg-gold-light rounded-xl"><span class="text-gray-300">Acil Durum Fonu</span><span class="text-gold font-semibold">${formatMoney(180000)}</span></div></div></div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="card p-6 text-center"><i class="fas fa-chart-simple text-3xl text-indigo-600 mb-3"></i><h3 class="font-semibold">Investment ROI</h3><p class="text-2xl font-bold text-indigo-600">+24.7%</p></div><div class="card p-6 text-center"><i class="fas fa-calendar-check text-3xl text-indigo-600 mb-3"></i><h3 class="font-semibold">FIRE Progress</h3><p class="text-2xl font-bold text-indigo-600">16.7%</p></div><div class="card p-6 text-center"><i class="fas fa-shield-alt text-3xl text-indigo-600 mb-3"></i><h3 class="font-semibold">Risk Score</h3><p class="text-2xl font-bold text-emerald-600">Low-Medium</p></div></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="card p-6 text-center"><i class="fas fa-chart-simple text-3xl text-gold mb-3"></i><h3 class="font-semibold text-white">Yatırım Getirisi</h3><p class="text-2xl font-bold text-gold">+%24.7</p></div>
+                    <div class="card p-6 text-center"><i class="fas fa-fire text-3xl text-gold mb-3"></i><h3 class="font-semibold text-white">FIRE İlerleme</h3><p class="text-2xl font-bold text-gold">%21.7</p></div>
+                    <div class="card p-6 text-center"><i class="fas fa-shield-alt text-3xl text-gold mb-3"></i><h3 class="font-semibold text-white">Risk Skoru</h3><p class="text-2xl font-bold text-emerald-500">Düşük-Orta</p></div>
+                </div>
             `;
         }
         
@@ -278,56 +307,61 @@
             let totalValue = investments.reduce((s, i) => s + i.value, 0);
             setTimeout(() => {
                 let ctx = document.getElementById('allocationChart')?.getContext('2d');
-                if (ctx) new Chart(ctx, { type: 'doughnut', data: { labels: investments.map(i => i.name), datasets: [{ data: investments.map(i => i.value), backgroundColor: ['#667eea', '#f59e0b', '#10b981', '#ef4444'] }] }, options: { responsive: true, maintainAspectRatio: true } });
+                if (ctx) new Chart(ctx, { type: 'doughnut', data: { labels: investments.map(i => i.name), datasets: [{ data: investments.map(i => i.value), backgroundColor: ['#f5b042', '#e09d2c', '#d48a1f', '#c27818'] }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { color: '#f5b042' } } } } });
             }, 100);
-            return `<div class="card p-6 mb-6"><div class="flex justify-between items-start"><div><p class="text-gray-500">Total Portfolio Value</p><h2 class="text-4xl font-bold">${formatMoney(totalValue)}</h2><p class="text-emerald-600 mt-2"><i class="fas fa-arrow-up"></i> +18.2% YTD</p></div><div class="bg-emerald-50 px-4 py-2 rounded-full"><span class="text-emerald-600 font-semibold">Low Risk</span></div></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="card p-6"><h3 class="font-semibold text-lg mb-4">Holdings</h3>${investments.map(inv => `<div class="flex justify-between items-center py-3 border-b"><div><p class="font-medium">${inv.name}</p><p class="text-sm text-gray-500">${inv.shares} shares @ ${formatMoney(inv.purchasePrice)}</p></div><div class="text-right"><p class="font-medium">${formatMoney(inv.value)}</p><p class="text-sm text-emerald-600">+${inv.change}%</p></div></div>`).join('')}</div><div class="card p-6"><h3 class="font-semibold text-lg mb-4">Asset Allocation</h3><canvas id="allocationChart" height="250"></canvas><div class="mt-4 p-3 bg-indigo-50 rounded-xl"><p class="text-sm text-indigo-800"><i class="fas fa-robot mr-1"></i> AI Suggestion: Rebalance to 70% stocks, 20% bonds, 10% alternatives</p></div></div></div>`;
+            return `<div class="card p-6 mb-6"><div class="flex justify-between items-start flex-wrap"><div><p class="text-gray-500">Toplam Yatırım Portföyü</p><h2 class="text-4xl font-bold text-gold">${formatMoney(totalValue)}</h2><p class="text-emerald-500 mt-2"><i class="fas fa-arrow-up"></i> +%18.2 Yıllık</p></div><div class="bg-gold-light px-4 py-2 rounded-full"><span class="text-gold font-semibold">Düşük Risk</span></div></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">Varlıklarım</h3>${investments.map(inv => `<div class="flex justify-between items-center py-3 border-b border-[#1e2556]"><div><p class="font-medium text-white">${inv.name}</p><p class="text-sm text-gray-500">${inv.symbol}</p></div><div class="text-right"><p class="font-medium text-gold">${formatMoney(inv.value)}</p><p class="text-sm text-emerald-500">+${inv.change}%</p></div></div>`).join('')}</div><div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">Varlık Dağılımı</h3><canvas id="allocationChart" height="250"></canvas><div class="mt-4 p-3 bg-gold-light rounded-xl"><p class="text-sm text-gold"><i class="fas fa-robot mr-1"></i> Yapay Zeka Önerisi: Portföyünüzü dengede tutmak için 3 ayda bir yeniden değerlendirin.</p></div></div></div>`;
         }
         
         function renderFire() {
             let monthlyExpense = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
-            let fireTarget = monthlyExpense * 12 * 25;
+            let fireTarget = fireGoals[0].target;
             let currentPortfolio = calculateNetWorth();
             let progress = (currentPortfolio / fireTarget * 100).toFixed(1);
-            return `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"><div class="card p-6"><p class="text-gray-500">FIRE Target (25x Rule)</p><h2 class="text-3xl font-bold">${formatMoney(fireTarget)}</h2><div class="mt-4 bg-gray-200 rounded-full h-2"><div class="bg-indigo-600 h-2 rounded-full" style="width: ${Math.min(progress, 100)}%"></div></div><p class="mt-2 text-sm">${progress}% Complete (${formatMoney(currentPortfolio)} / ${formatMoney(fireTarget)})</p></div><div class="card p-6"><p class="text-gray-500">Monthly Passive Income Goal</p><h2 class="text-3xl font-bold">${formatMoney(monthlyExpense)}/month</h2><p class="text-emerald-600 mt-2">Current Passive: ${formatMoney(monthlyExpense * 0.18)} (18%)</p></div></div><div class="card p-6"><h3 class="font-semibold text-lg mb-4">Retirement Simulator</h3><div class="space-y-4"><div><label class="text-sm">Monthly Investment</label><input type="range" id="fireSlider" min="1000" max="30000" value="15000" class="w-full"><span id="fireSliderVal" class="ml-3 font-mono text-indigo-600">₺15,000</span></div><div><label class="text-sm">Expected Annual Return</label><input type="range" id="returnSlider" min="4" max="12" step="0.5" value="7" class="w-full"><span id="returnSliderVal" class="ml-3 font-mono text-indigo-600">7%</span></div><div class="bg-indigo-50 p-4 rounded-xl"><p id="fireResult" class="text-indigo-800 font-medium">📊 With current savings, you'll reach FIRE in 18.5 years (age 49).</p></div></div></div>`;
+            return `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"><div class="card p-6"><p class="text-gray-500">FIRE Hedefi (25x Kuralı)</p><h2 class="text-3xl font-bold text-gold">${formatMoney(fireTarget)}</h2><div class="mt-4 bg-[#1e2556] rounded-full h-2"><div class="bg-gold h-2 rounded-full" style="width: ${Math.min(progress, 100)}%"></div></div><p class="mt-2 text-sm text-gold">%${progress} Tamamlandı (${formatMoney(currentPortfolio)} / ${formatMoney(fireTarget)})</p></div><div class="card p-6"><p class="text-gray-500">Aylık Pasif Gelir Hedefi</p><h2 class="text-3xl font-bold text-gold">${formatMoney(monthlyExpense)}/ay</h2><p class="text-emerald-500 mt-2">Mevcut Pasif: ${formatMoney(monthlyExpense * 0.18)} (%18)</p></div></div><div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">FIRE Simülatörü</h3><div class="space-y-4"><div><label class="text-sm text-gray-300">Aylık Yatırım</label><input type="range" id="fireSlider" min="5000" max="50000" value="25000" class="w-full accent-gold"><span id="fireSliderVal" class="ml-3 font-mono text-gold">₺25,000</span></div><div><label class="text-sm text-gray-300">Beklenen Yıllık Getiri</label><input type="range" id="returnSlider" min="4" max="12" step="0.5" value="7" class="w-full accent-gold"><span id="returnSliderVal" class="ml-3 font-mono text-gold">%7</span></div><div class="bg-gold-light p-4 rounded-xl"><p id="fireResult" class="text-gold font-medium">📊 Mevcut birikimle FIRE hedefine 18.5 yılda (2042 yılı) ulaşacaksınız.</p></div></div></div>`;
+        }
+        
+        function renderDigitalMarket() {
+            return `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">${marketplaceProducts.map(p => `<div class="card p-6 text-center"><div class="text-5xl mb-3">${p.image}</div><h3 class="font-bold text-gold text-lg">${p.name}</h3><p class="text-gray-500 text-sm">${p.type === 'course' ? '📺 Eğitim' : p.type === 'ebook' ? '📖 E-Kitap' : '🎯 Danışmanlık'} • ${p.rating}⭐ (${p.sales} satış)</p><p class="text-gray-400 text-xs mt-1">${p.author}</p><p class="text-2xl font-bold text-gold mt-3">${formatMoney(p.price)}</p><button class="mt-4 w-full py-2 bg-gold text-[#0a0f2c] rounded-lg font-semibold hover:bg-amber-500 transition">Satın Al</button></div>`).join('')}</div><div class="card p-6 text-center"><i class="fas fa-chalkboard-user text-4xl text-gold mb-3"></i><h3 class="font-bold text-white text-xl">Özel Danışmanlık Hizmeti</h3><p class="text-gray-400 mt-2">CFO. Orhan BOYRAZ ile 1-1 özel finansal danışmanlık</p><button class="mt-4 px-6 py-2 btn-gold rounded-lg">Randevu Al →</button></div>`;
         }
         
         function renderAdvisory() {
-            return `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"><div class="card p-6"><h3 class="font-semibold text-lg mb-4">Book a Consultation</h3>${advisors.map(a => `<div class="flex justify-between items-center py-3 border-b"><div><p class="font-medium">${a.name}</p><p class="text-sm text-gray-500">${a.title} • ${a.expertise}</p><p class="text-indigo-600 text-sm mt-1">${formatMoney(a.hourlyRate)}/hour</p></div><button class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Book</button></div>`).join('')}</div><div class="card p-6"><h3 class="font-semibold text-lg mb-4">AI Financial Advisor</h3><div id="chatMessages" class="h-64 overflow-y-auto mb-4 p-3 bg-gray-50 rounded-xl"><div class="mb-3"><div class="bg-indigo-100 rounded-lg p-3 inline-block"><p class="text-sm">👋 Hello! I'm your AI financial advisor. Ask me about FIRE, investments, or savings strategies!</p></div></div></div><div class="flex gap-2"><input type="text" id="chatInput" placeholder="Ask me anything..." class="flex-1 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"><button id="sendChat" class="px-4 py-2 bg-indigo-600 text-white rounded-xl"><i class="fas fa-paper-plane"></i></button></div></div></div>`;
-        }
-        
-        function renderMarketplace() {
-            return `<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">${marketplaceProducts.map(p => `<div class="card p-6 text-center"><div class="text-5xl mb-3">${p.image}</div><h3 class="font-bold text-lg">${p.name}</h3><p class="text-gray-500 text-sm">${p.type.charAt(0).toUpperCase() + p.type.slice(1)} • ${p.rating}⭐ (${p.sales} sold)</p><p class="text-2xl font-bold text-indigo-600 mt-3">${formatMoney(p.price)}</p><button class="mt-4 w-full py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Purchase</button></div>`).join('')}</div><div class="card p-6"><h3 class="font-semibold text-lg mb-4">Affiliate Financial Services</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div class="p-4 border rounded-xl text-center"><i class="fas fa-credit-card text-2xl text-indigo-600 mb-2"></i><p class="font-medium">High-Yield Savings</p><p class="text-sm text-gray-500">4.5% APY</p><button class="mt-2 text-indigo-600 text-sm">Learn More →</button></div><div class="p-4 border rounded-xl text-center"><i class="fas fa-chart-line text-2xl text-indigo-600 mb-2"></i><p class="font-medium">Robo-Advisor</p><p class="text-sm text-gray-500">0.25% fee</p><button class="mt-2 text-indigo-600 text-sm">Learn More →</button></div><div class="p-4 border rounded-xl text-center"><i class="fas fa-file-invoice text-2xl text-indigo-600 mb-2"></i><p class="font-medium">Tax Services</p><p class="text-sm text-gray-500">Starting $49</p><button class="mt-2 text-indigo-600 text-sm">Learn More →</button></div></div></div>`;
+            return `<div class="card p-6 mb-6"><h3 class="font-semibold text-gold text-lg mb-4">Danışmanlık Hizmetleri</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div class="p-4 bg-gold-light rounded-xl text-center"><i class="fas fa-user-tie text-3xl text-gold mb-2"></i><p class="font-semibold text-white">Bireysel Danışmanlık</p><p class="text-gold text-sm">499₺/saat</p><button class="mt-2 text-gold text-sm">Randevu Al →</button></div><div class="p-4 bg-gold-light rounded-xl text-center"><i class="fas fa-chart-line text-3xl text-gold mb-2"></i><p class="font-semibold text-white">Portföy Yönetimi</p><p class="text-gold text-sm">3.999₺/ay</p><button class="mt-2 text-gold text-sm">Başvur →</button></div><div class="p-4 bg-gold-light rounded-xl text-center"><i class="fas fa-fire text-3xl text-gold mb-2"></i><p class="font-semibold text-white">FIRE Planlaması</p><p class="text-gold text-sm">1.499₺</p><button class="mt-2 text-gold text-sm">Detaylar →</button></div></div></div><div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">Yapay Zeka Finansal Asistan</h3><div id="chatMessages" class="h-64 overflow-y-auto mb-4 p-3 bg-[#0f1338] rounded-xl border border-[#1e2556]"><div class="mb-3"><div class="bg-gold-light rounded-lg p-3 inline-block"><p class="text-sm text-gold">🤖 Merhaba! Ben FinSage AI asistanınız. Size nasıl yardımcı olabilirim?</p></div></div></div><div class="flex gap-2"><input type="text" id="chatInput" placeholder="Sorunuzu yazın..." class="flex-1 px-4 py-2 rounded-xl focus:ring-2 focus:ring-gold"><button id="sendChat" class="px-4 py-2 bg-gold text-[#0a0f2c] rounded-xl font-semibold"><i class="fas fa-paper-plane"></i> Gönder</button></div></div>`;
         }
         
         function renderPricing() {
-            return `<div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="card p-8 text-center"><h3 class="text-2xl font-bold">Basic</h3><p class="text-4xl font-bold mt-4">Free</p><ul class="mt-6 space-y-3 text-left"><li><i class="fas fa-check text-emerald-500 mr-2"></i>Core dashboard & tracking</li><li><i class="fas fa-check text-emerald-500 mr-2"></i>1 investment portfolio</li><li><i class="fas fa-times text-gray-400 mr-2"></i>AI insights</li><li><i class="fas fa-times text-gray-400 mr-2"></i>Advisory access</li></ul><button class="mt-8 w-full py-2 border-2 border-indigo-600 text-indigo-600 rounded-lg font-semibold">Current Plan</button></div><div class="card p-8 text-center border-2 border-indigo-600 relative"><div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white px-3 py-1 rounded-full text-xs">Popular</div><h3 class="text-2xl font-bold">Pro</h3><p class="text-4xl font-bold mt-4">$9.99<span class="text-base font-normal">/mo</span></p><ul class="mt-6 space-y-3 text-left"><li><i class="fas fa-check text-emerald-500 mr-2"></i>Everything in Basic</li><li><i class="fas fa-check text-emerald-500 mr-2"></i>Unlimited portfolios</li><li><i class="fas fa-check text-emerald-500 mr-2"></i>AI-powered insights</li><li><i class="fas fa-check text-emerald-500 mr-2"></i>Chatbot support</li></ul><button class="mt-8 w-full py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700">Upgrade Now</button></div><div class="card p-8 text-center"><h3 class="text-2xl font-bold">Premium</h3><p class="text-4xl font-bold mt-4">$29.99<span class="text-base font-normal">/mo</span></p><ul class="mt-6 space-y-3 text-left"><li><i class="fas fa-check text-emerald-500 mr-2"></i>Everything in Pro</li><li><i class="fas fa-check text-emerald-500 mr-2"></i>1-on-1 advisor sessions</li><li><i class="fas fa-check text-emerald-500 mr-2"></i>Personalized FIRE plan</li><li><i class="fas fa-check text-emerald-500 mr-2"></i>Priority support</li></ul><button class="mt-8 w-full py-2 border-2 border-indigo-600 text-indigo-600 rounded-lg font-semibold">Upgrade</button></div></div>`;
+            return `<div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="card p-8 text-center"><h3 class="text-2xl font-bold text-gold">Basic</h3><p class="text-4xl font-bold text-white mt-4">₺0<span class="text-base font-normal text-gray-400">/ay</span></p><ul class="mt-6 space-y-3 text-left"><li><i class="fas fa-check text-gold mr-2"></i>Yönetim Paneli</li><li><i class="fas fa-check text-gold mr-2"></i>Temel Takip</li><li><i class="fas fa-times text-gray-500 mr-2"></i>Yapay Zeka Analizi</li></ul><button class="mt-8 w-full py-2 border-2 border-gold text-gold rounded-lg font-semibold hover:bg-gold hover:text-[#0a0f2c] transition">Mevcut Plan</button></div><div class="card p-8 text-center border-2 border-gold relative"><div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gold text-[#0a0f2c] px-3 py-1 rounded-full text-xs font-bold">Popüler</div><h3 class="text-2xl font-bold text-gold">Pro</h3><p class="text-4xl font-bold text-white mt-4">₺299<span class="text-base font-normal text-gray-400">/ay</span></p><ul class="mt-6 space-y-3 text-left"><li><i class="fas fa-check text-gold mr-2"></i>Tüm Basic</li><li><i class="fas fa-check text-gold mr-2"></i>Yatırım Analizi</li><li><i class="fas fa-check text-gold mr-2"></i>Yapay Zeka Önerileri</li></ul><button class="mt-8 w-full py-2 bg-gold text-[#0a0f2c] rounded-lg font-semibold hover:bg-amber-500 transition">Yükselt</button></div><div class="card p-8 text-center"><h3 class="text-2xl font-bold text-gold">Premium</h3><p class="text-4xl font-bold text-white mt-4">₺899<span class="text-base font-normal text-gray-400">/ay</span></p><ul class="mt-6 space-y-3 text-left"><li><i class="fas fa-check text-gold mr-2"></i>Tüm Pro</li><li><i class="fas fa-check text-gold mr-2"></i>Birebir Danışmanlık</li><li><i class="fas fa-check text-gold mr-2"></i>Özel FIRE Planı</li></ul><button class="mt-8 w-full py-2 border-2 border-gold text-gold rounded-lg font-semibold hover:bg-gold hover:text-[#0a0f2c] transition">Yükselt</button></div></div>`;
         }
         
         // ============================================
-        // 5. RENDER ENGINE
+        // 6. RENDER ENGINE
         // ============================================
         
         function navigateTo(page) { currentPage = page; renderApp(); }
-        function toggleDarkMode() { darkMode = !darkMode; localStorage.setItem('darkMode', darkMode); renderApp(); }
         
         function renderApp() {
             if (!currentUser) {
                 document.getElementById('root').innerHTML = renderAuth();
-                document.getElementById('loginTab')?.addEventListener('click', () => { document.getElementById('loginForm').classList.remove('hidden'); document.getElementById('registerForm').classList.add('hidden'); document.getElementById('loginTab').classList.add('border-indigo-600', 'text-indigo-600'); document.getElementById('registerTab').classList.remove('border-indigo-600', 'text-indigo-600'); });
-                document.getElementById('registerTab')?.addEventListener('click', () => { document.getElementById('registerForm').classList.remove('hidden'); document.getElementById('loginForm').classList.add('hidden'); document.getElementById('registerTab').classList.add('border-indigo-600', 'text-indigo-600'); document.getElementById('loginTab').classList.remove('border-indigo-600', 'text-indigo-600'); });
-                document.getElementById('loginFormElement')?.addEventListener('submit', (e) => { e.preventDefault(); if (handleLogin(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value)) renderApp(); else alert('Invalid credentials'); });
-                document.getElementById('registerFormElement')?.addEventListener('submit', (e) => { e.preventDefault(); if (handleRegister(document.getElementById('regName').value, document.getElementById('regEmail').value, document.getElementById('regPassword').value)) renderApp(); else alert('Registration failed or email exists'); });
+                document.getElementById('loginForm')?.addEventListener('submit', (e) => { 
+                    e.preventDefault(); 
+                    if (handleLogin(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value)) renderApp(); 
+                    else alert('Hatalı giriş! admin@finsage.com / admin123');
+                });
                 return;
             }
             
             let mainContent = `
-                <div class="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+                <div class="flex min-h-screen" style="background: linear-gradient(135deg, #0a0f2c 0%, #12173f 100%);">
                     ${renderSidebar()}
                     <main class="flex-1 ml-72 p-8 transition-all duration-300">
                         <div class="max-w-7xl mx-auto animate-fade-in">
-                            <h1 class="text-3xl font-bold mb-2">${currentPage.charAt(0).toUpperCase() + currentPage.slice(1)}</h1>
-                            <p class="text-gray-500 mb-6">Welcome back, ${currentUser.name}</p>
-                            ${currentPage === 'dashboard' ? renderDashboard() : currentPage === 'investments' ? renderInvestments() : currentPage === 'fire' ? renderFire() : currentPage === 'advisory' ? renderAdvisory() : currentPage === 'marketplace' ? renderMarketplace() : renderPricing()}
+                            <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+                                <div>
+                                    <h1 class="text-3xl font-bold text-gold">${currentPage === 'dashboard' ? 'Yönetim Paneli' : currentPage === 'investments' ? 'Yatırımlar' : currentPage === 'fire' ? 'FIRE Planlayıcı' : currentPage === 'digitalmarket' ? 'Dijital Market' : currentPage === 'advisory' ? 'Danışmanlık' : 'Ücretlendirme'}</h1>
+                                    <p class="text-gray-400">Hoş geldiniz, ${currentUser.name}</p>
+                                </div>
+                            </div>
+                            ${currentPage === 'dashboard' ? renderDashboard() : currentPage === 'investments' ? renderInvestments() : currentPage === 'fire' ? renderFire() : currentPage === 'digitalmarket' ? renderDigitalMarket() : currentPage === 'advisory' ? renderAdvisory() : renderPricing()}
+                            ${renderFooter()}
                         </div>
                     </main>
                 </div>
@@ -337,25 +371,41 @@
             if (currentPage === 'fire') {
                 let slider = document.getElementById('fireSlider');
                 let returnSlider = document.getElementById('returnSlider');
-                if (slider) slider.addEventListener('input', (e) => { document.getElementById('fireSliderVal').innerText = `₺${parseInt(e.target.value).toLocaleString()}`; updateFirePrediction(); });
-                if (returnSlider) returnSlider.addEventListener('input', (e) => { document.getElementById('returnSliderVal').innerText = `${e.target.value}%`; updateFirePrediction(); });
-                function updateFirePrediction() { document.getElementById('fireResult').innerHTML = `📊 With current savings, you'll reach FIRE in ${(Math.random() * 10 + 12).toFixed(1)} years (age ${(new Date().getFullYear() - 1990 + 12).toFixed(0)}).`; }
+                if (slider) slider.addEventListener('input', (e) => { 
+                    document.getElementById('fireSliderVal').innerText = `₺${parseInt(e.target.value).toLocaleString()}`; 
+                    updateFirePrediction(); 
+                });
+                if (returnSlider) returnSlider.addEventListener('input', (e) => { 
+                    document.getElementById('returnSliderVal').innerText = `%${e.target.value}`; 
+                    updateFirePrediction(); 
+                });
+                function updateFirePrediction() { 
+                    let years = (Math.random() * 12 + 12).toFixed(1);
+                    document.getElementById('fireResult').innerHTML = `📊 Mevcut birikimle FIRE hedefine ${years} yılda (${new Date().getFullYear() + parseInt(years)} yılı) ulaşacaksınız.`; 
+                }
             }
             
             if (currentPage === 'advisory') {
                 document.getElementById('sendChat')?.addEventListener('click', () => {
                     let input = document.getElementById('chatInput');
-                    let msg = input.value.toLowerCase();
-                    let response = chatbotResponses[msg.includes('fire') ? 'fire' : msg.includes('invest') ? 'invest' : msg.includes('saving') ? 'savings' : 'default'];
+                    let msg = input.value;
+                    if (!msg.trim()) return;
+                    let responses = [
+                        "FIRE hedefinize ulaşmak için düzenli yatırım yapmalısınız.",
+                        "Portföy çeşitlendirmesi riskinizi azaltır.",
+                        "Acil durum fonunuzu 6-12 aylık gider olarak ayırmanızı öneririm.",
+                        "Yatırım yaparken uzun vadeli düşünmek en doğrusudur."
+                    ];
+                    let response = responses[Math.floor(Math.random() * responses.length)];
                     let chatDiv = document.getElementById('chatMessages');
-                    chatDiv.innerHTML += `<div class="mb-3 text-right"><div class="bg-indigo-100 rounded-lg p-3 inline-block"><p class="text-sm">${msg}</p></div></div><div class="mb-3"><div class="bg-gray-200 rounded-lg p-3 inline-block"><p class="text-sm">🤖 ${response}</p></div></div>`;
+                    chatDiv.innerHTML += `<div class="mb-3 text-right"><div class="bg-gold rounded-lg p-3 inline-block"><p class="text-sm text-[#0a0f2c]">${msg}</p></div></div><div class="mb-3"><div class="bg-gold-light rounded-lg p-3 inline-block"><p class="text-sm text-gold">🤖 ${response}</p></div></div>`;
                     chatDiv.scrollTop = chatDiv.scrollHeight;
                     input.value = '';
                 });
             }
         }
         
-        // Initialize
+        // Başlatma
         let savedUser = localStorage.getItem('finsage_user');
         if (savedUser) { try { currentUser = JSON.parse(savedUser); } catch(e) {} }
         renderApp();
