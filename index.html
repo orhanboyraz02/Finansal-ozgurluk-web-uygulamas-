@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewfit=cover">
     <meta name="description" content="FinTech - Yapay Zeka Destekli Finansal Yönetim Web Uygulaması">
     <meta name="theme-color" content="#0a0f2c">
     <title>FinTech | Yapay Zeka Destekli Finansal Yönetim</title>
@@ -70,25 +70,83 @@
             { id: 2, name: 'Pasif Gelir Mavi Kitap', type: 'ebook', price: 49, sales: 1890, rating: 4.8, image: '📘', author: 'Orhan BOYRAZ', whatsappLink: 'https://wa.me/905418660202?text=Merhaba, Pasif Gelir Mavi Kitap e-kitabını satın almak istiyorum.' },
             { id: 3, name: 'Yatırım 101 Eğitimi', type: 'course', price: 199, sales: 567, rating: 4.7, image: '📈', author: 'FinTech Ekibi', whatsappLink: 'https://wa.me/905418660202?text=Merhaba, Yatırım 101 Eğitimi kursunu satın almak istiyorum.' },
             { id: 4, name: 'Dijital Varlık Yönetimi', type: 'course', price: 399, sales: 156, rating: 4.8, image: '💎', author: 'Orhan BOYRAZ', whatsappLink: 'https://wa.me/905418660202?text=Merhaba, Dijital Varlık Yönetimi kursunu satın almak istiyorum.' },
-            { id: 5, name: 'Borsa Terimleri Sözlüğü', type: 'ebook', price: 29, sales: 3420, rating: 4.6, image: '📚', author: 'FinTech Ekibi', whatsappLink: 'https://wa.me/905418660202?text=Merhaba, Borsa Terimleri Sözlüğü e-kitabını satın almak istiyorum.' },
+            { id: 5, name: 'Borsa Terimleri Sözlüğu', type: 'ebook', price: 29, sales: 3420, rating: 4.6, image: '📚', author: 'FinTech Ekibi', whatsappLink: 'https://wa.me/905418660202?text=Merhaba, Borsa Terimleri Sözlüğü e-kitabını satın almak istiyorum.' },
             { id: 6, name: 'Kripto Para Rehberi', type: 'ebook', price: 79, sales: 890, rating: 4.7, image: '₿', author: 'Orhan BOYRAZ', whatsappLink: 'https://wa.me/905418660202?text=Merhaba, Kripto Para Rehberi e-kitabını satın almak istiyorum.' },
             { id: 7, name: 'Emeklilik Planlama Kursu', type: 'course', price: 349, sales: 234, rating: 4.9, image: '🎯', author: 'FinTech Ekibi', whatsappLink: 'https://wa.me/905418660202?text=Merhaba, Emeklilik Planlama Kursunu satın almak istiyorum.' },
             { id: 8, name: 'Vergi Optimizasyonu Kitabı', type: 'ebook', price: 99, sales: 567, rating: 4.5, image: '📊', author: 'Orhan BOYRAZ', whatsappLink: 'https://wa.me/905418660202?text=Merhaba, Vergi Optimizasyonu Kitabını satın almak istiyorum.' }
         ];
         
-        // --- FIRE HESAPLAMA ---
+        // --- BECERİ/YETENEK EĞİTİMİ ---
+        let skillCourses = [
+            { id: 1, name: 'Dijital Pazarlama Sertifikası', price: 1499, duration: '8 hafta', level: 'Başlangıç', image: '📢', whatsappLink: 'https://wa.me/905418660202?text=Merhaba, Dijital Pazarlama Sertifikası kursuna kaydolmak istiyorum.' },
+            { id: 2, name: 'Finansal Okuryazarlık Eğitimi', price: 999, duration: '4 hafta', level: 'Başlangıç', image: '📊', whatsappLink: 'https://wa.me/905418660202?text=Merhaba, Finansal Okuryazarlık Eğitimine kaydolmak istiyorum.' },
+            { id: 3, name: 'Yatırım Analizi Uzmanlığı', price: 2499, duration: '10 hafta', level: 'İleri', image: '📈', whatsappLink: 'https://wa.me/905418660202?text=Merhaba, Yatırım Analizi Uzmanlığı kursuna kaydolmak istiyorum.' },
+            { id: 4, name: 'Girişimcilik ve İş Kurma', price: 1999, duration: '6 hafta', level: 'Orta', image: '🚀', whatsappLink: 'https://wa.me/905418660202?text=Merhaba, Girişimcilik ve İş Kurma kursuna kaydolmak istiyorum.' }
+        ];
+        
+        // --- FIRE HESAPLAMA (Pasif gelir giderden çıkarılır) ---
         let financeData = {
             monthlyIncome: 85000,
             monthlyExpense: 45000,
-            annualExpense: 540000,
             assets: 4525000,
             liabilities: 850000,
             passiveIncome: 12500,
-            inflationRate: 45,
-            netIncome: 40000
+            inflationRate: 45
         };
-        financeData.netIncome = financeData.monthlyIncome - financeData.monthlyExpense;
-        financeData.annualExpense = financeData.monthlyExpense * 12;
+        
+        // --- DOĞRU FIRE HESAPLAMA (Pasif gelir giderden düşülür) ---
+        function calculateFIRE() {
+            // Net gider = aylık gider - aylık pasif gelir (Pasif gelir gideri karşılar)
+            let netMonthlyExpense = Math.max(0, financeData.monthlyExpense - financeData.passiveIncome);
+            let netAnnualExpense = netMonthlyExpense * 12;
+            
+            // Enflasyon ile düzeltilmiş yıllık gider
+            let realAnnualExpense = netAnnualExpense * (1 + financeData.inflationRate / 100);
+            
+            // FIRE Hedefi (25x kuralı)
+            let fireTarget = realAnnualExpense * 25;
+            
+            // Mevcut Net Varlık
+            let netWorth = financeData.assets - financeData.liabilities;
+            
+            // Aylık net gelir (gelir - gider)
+            let monthlyNetIncome = financeData.monthlyIncome - financeData.monthlyExpense;
+            
+            // Yıllık tasarruf potansiyeli
+            let annualSavings = monthlyNetIncome * 12;
+            
+            // Kalan ihtiyaç (hedef - mevcut)
+            let remainingNeed = fireTarget - netWorth;
+            
+            // FIRE'a kalan yıl sayısı (basit hesaplama, getiri varsayımı yıllık %5)
+            let yearsToFire = remainingNeed > 0 ? remainingNeed / (annualSavings + (financeData.passiveIncome * 12 * 0.05)) : 0;
+            if (yearsToFire < 0) yearsToFire = 0;
+            
+            // İlerleme yüzdesi
+            let progress = netWorth / fireTarget * 100;
+            if (progress > 100) progress = 100;
+            
+            // FIRE Seviyesi
+            let fireLevel = '';
+            if (progress >= 100) fireLevel = '🏆 Bağımsız (FIRE)';
+            else if (progress >= 75) fireLevel = '🚀 İleri Seviye (>%75)';
+            else if (progress >= 50) fireLevel = '📈 Orta Seviye (>%50)';
+            else if (progress >= 25) fireLevel = '🌱 Başlangıç (>%25)';
+            else fireLevel = '🎯 Hedef Belirlendi';
+            
+            return {
+                fireTarget,
+                netWorth,
+                progress: progress.toFixed(1),
+                yearsToFire: yearsToFire.toFixed(1),
+                fireLevel,
+                netMonthlyExpense,
+                netAnnualExpense,
+                realAnnualExpense,
+                monthlyNetIncome,
+                annualSavings
+            };
+        }
         
         // --- PAKET ÖZELLİKLERİ ---
         const pricingPlans = [
@@ -97,7 +155,7 @@
             { name: 'Premium', price: 899, features: ['Tüm Pro Özellikleri', 'Birebir Danışmanlık', 'Özel FIRE Planı', 'Öncelikli Destek'], whatsapp: 'Premium plan satın almak istiyorum.' }
         ];
         
-        // --- DANIŞMANLIK HİZMETLERİ (FIRE Danışmanlığı eklendi) ---
+        // --- DANIŞMANLIK HİZMETLERİ ---
         const consultingServices = [
             { name: 'CFO Danışmanlık', price: '1.499₺/saat', icon: 'fa-chart-line', desc: 'Kurumsal finans yönetimi', whatsapp: 'Merhaba, CFO danışmanlık hizmeti almak istiyorum.' },
             { name: 'Liderlik Danışmanlığı', price: '1.299₺/saat', icon: 'fa-crown', desc: 'Yönetici koçluğu ve liderlik gelişimi', whatsapp: 'Merhaba, liderlik danışmanlığı almak istiyorum.' },
@@ -106,30 +164,23 @@
             { name: 'FIRE Danışmanlık', price: '1.999₺', icon: 'fa-fire', desc: 'Finansal bağımsızlık için özel yol haritası', whatsapp: 'Merhaba, FIRE danışmanlığı almak istiyorum.' }
         ];
         
-        // --- OFFLINE YAPAY ZEKA ASİSTANI (Gemini yok, offline çalışır) ---
+        // --- OFFLINE AI ASİSTAN ---
         function getOfflineAIResponse(userMessage) {
             const msg = userMessage.toLowerCase();
-            
             if (msg.includes('fire') || msg.includes('finansal bağımsızlık')) {
-                return "🔥 FIRE (Financial Independence Retire Early), finansal bağımsızlığa erken ulaşmayı hedefleyen bir harekettir. 25 kat yıllık gider hedefiyle planlama yapabilirsiniz. Mevcut verilerinize göre FIRE hedefinize ulaşmanız için önerilen aylık tasarruf miktarını hesaplayabiliriz.";
+                return "🔥 FIRE hesaplamasında pasif gelir, aylık giderlerinizden düşülür. Net gideriniz üzerinden 25 kat kuralı ile FIRE hedefiniz belirlenir. Mevcut verilerinize göre FIRE seviyenizi ve hedefe kalan yılınızı FIRE Planlayıcı sayfasından görebilirsiniz.";
             }
             else if (msg.includes('yatırım') || msg.includes('portföy')) {
                 return "📈 Yatırım portföyünüzde çeşitlendirme önemlidir. Altın, hisse, gayrimenkul ve nakit dengesi kurarak riskinizi dağıtabilirsiniz. Uzun vadeli yatırım enflasyona karşı en etkili korunma yöntemidir.";
             }
-            else if (msg.includes('borç')) {
-                return "💰 Borç yönetiminde öncelik yüksek faizli borçları kapatmak olmalıdır. Kredi kartı borçları, tüketici kredileri gibi yüksek faizli borçlarınız varsa önce bunları kapatmanızı öneririm.";
-            }
-            else if (msg.includes('tasarruf')) {
-                return "📊 Tasarruf oranınız, finansal bağımsızlığa ulaşma hızınızı belirleyen en önemli faktördür. Gelirinizin en az %20'sini tasarruf etmeye çalışın. Mevcut tasarruf oranınızı artırmak için küçük harcamalarınızı gözden geçirebilirsiniz.";
-            }
-            else if (msg.includes('enflasyon')) {
-                return "📉 Enflasyon karşısında paranızı korumak için altın, döviz, gayrimenkul ve hisse senedi gibi varlıklara yatırım yapmalısınız. Mevcut enflasyon oranı %" + financeData.inflationRate + " seviyesinde.";
-            }
             else if (msg.includes('pasif gelir')) {
-                return "💸 Pasif gelir, aktif çalışmadan elde edilen gelirdir. Kira geliri, temettü, faiz, dijital ürün satışları pasif gelir kaynaklarına örnektir. Mevcut pasif geliriniz aylık " + formatMoney(financeData.passiveIncome) + " seviyesinde.";
+                return "💸 Pasif gelir, finansal bağımsızlık için kritik öneme sahiptir. Pasif geliriniz arttıkça FIRE hedefinize ulaşmak için ihtiyacınız olan portföy büyüklüğü azalır. Pasif gelirinizi artırmak için kira geliri, temettü, dijital ürünler gibi kaynaklara yönelebilirsiniz.";
+            }
+            else if (msg.includes('beceri') || msg.includes('eğitim')) {
+                return "🎓 FinTech platformunda Dijital Pazarlama, Finansal Okuryazarlık, Yatırım Analizi ve Girişimcilik eğitimleri bulunmaktadır. Bu eğitimlerle finansal okuryazarlığınızı artırabilir ve kariyerinizde yeni beceriler kazanabilirsiniz.";
             }
             else {
-                return "🤖 FinTech AI asistanı olarak size yatırım, FIRE, borç yönetimi, tasarruf stratejileri ve finansal planlama konularında yardımcı olabilirim. Lütfen bu konularda sorular sorun.";
+                return "🤖 FinTech AI asistanı olarak size yatırım, FIRE, pasif gelir, beceri eğitimleri ve finansal planlama konularında yardımcı olabilirim. Lütfen bu konularda sorular sorun.";
             }
         }
         
@@ -163,24 +214,12 @@
         function deleteInvestment(id) { investments = investments.filter(i => i.id !== id); showToast('🗑️ Yatırım silindi'); renderApp(); }
         function addProduct(name, type, price, image, author) { let whatsappLink = `https://wa.me/905418660202?text=Merhaba, ${name} ürününü satın almak istiyorum.`; marketplaceProducts.push({ id: Date.now(), name, type, price: parseFloat(price), sales: 0, rating: 5.0, image, author, whatsappLink }); showToast('✅ Ürün eklendi'); renderApp(); }
         function deleteProduct(id) { marketplaceProducts = marketplaceProducts.filter(p => p.id !== id); showToast('🗑️ Ürün silindi'); renderApp(); }
+        function addSkillCourse(name, price, duration, level, image) { let whatsappLink = `https://wa.me/905418660202?text=Merhaba, ${name} kursuna kaydolmak istiyorum.`; skillCourses.push({ id: Date.now(), name, price: parseFloat(price), duration, level, image, whatsappLink }); showToast('✅ Beceri kursu eklendi'); renderApp(); }
+        function deleteSkillCourse(id) { skillCourses = skillCourses.filter(c => c.id !== id); showToast('🗑️ Beceri kursu silindi'); renderApp(); }
         
         function openAddInvestmentModal() { let m = document.createElement('div'); m.className = 'modal-overlay'; m.innerHTML = `<div class="modal-content"><h2 class="text-2xl font-bold text-gold mb-4">➕ Yeni Yatırım Ekle</h2><input type="text" id="invName" placeholder="Yatırım Adı" class="mb-3"><select id="invType" class="mb-3"><option value="cash">Nakit</option><option value="realestate">Emlak</option><option value="gold">Altın</option><option value="stock">Hisse</option><option value="usstock">ABD Borsası</option><option value="fund">Fon</option><option value="eurobond">Eurobond</option><option value="venture">Girişim</option></select><input type="number" id="invValue" placeholder="Değer (₺)" class="mb-3"><input type="number" id="invChange" placeholder="Değişim (%)" class="mb-4"><div class="flex gap-3"><button onclick="this.closest('.modal-overlay').remove()" class="flex-1 py-2 border border-gray-500 rounded-lg text-gray-400">İptal</button><button id="confirmAddInv" class="flex-1 btn-gold py-2 rounded-lg">Ekle</button></div></div>`; document.body.appendChild(m); document.getElementById('confirmAddInv').onclick = () => { let name = document.getElementById('invName').value; let type = document.getElementById('invType').value; let val = document.getElementById('invValue').value; let chg = document.getElementById('invChange').value; if (name && val && chg) { addInvestment(name, type.toUpperCase(), type, val, chg); m.remove(); } else alert('Tüm alanları doldurun!'); }; }
         function openAddProductModal() { let m = document.createElement('div'); m.className = 'modal-overlay'; m.innerHTML = `<div class="modal-content"><h2 class="text-2xl font-bold text-gold mb-4">➕ Yeni Ürün Ekle</h2><input type="text" id="prodName" placeholder="Ürün Adı" class="mb-3"><select id="prodType" class="mb-3"><option value="course">Eğitim</option><option value="ebook">E-Kitap</option></select><input type="number" id="prodPrice" placeholder="Fiyat (₺)" class="mb-3"><input type="text" id="prodImage" placeholder="Emoji" class="mb-3"><input type="text" id="prodAuthor" placeholder="Yazar" class="mb-4"><div class="flex gap-3"><button onclick="this.closest('.modal-overlay').remove()" class="flex-1 py-2 border border-gray-500 rounded-lg text-gray-400">İptal</button><button id="confirmAddProd" class="flex-1 btn-gold py-2 rounded-lg">Ekle</button></div></div>`; document.body.appendChild(m); document.getElementById('confirmAddProd').onclick = () => { let name = document.getElementById('prodName').value; let type = document.getElementById('prodType').value; let price = document.getElementById('prodPrice').value; let img = document.getElementById('prodImage').value; let author = document.getElementById('prodAuthor').value; if (name && price) { addProduct(name, type, price, img, author || 'FinTech'); m.remove(); } else alert('Tüm alanları doldurun!'); }; }
-        
-        function calculateFIRE() {
-            let netIncome = financeData.monthlyIncome - financeData.monthlyExpense;
-            financeData.netIncome = netIncome;
-            financeData.annualExpense = financeData.monthlyExpense * 12;
-            let netAssets = financeData.assets - financeData.liabilities;
-            let adjustedNetIncome = netIncome * 12;
-            let adjustedPassive = financeData.passiveIncome * 12;
-            let adjustedExpense = financeData.monthlyExpense * 12;
-            let realExpense = adjustedExpense * (1 + financeData.inflationRate / 100);
-            let fireTarget = realExpense * 25;
-            let currentSavings = netAssets + (adjustedNetIncome + adjustedPassive) * 0.7;
-            let progress = (currentSavings / fireTarget * 100).toFixed(1);
-            return { fireTarget, currentSavings, progress, realExpense, netIncome, annualExpense: financeData.annualExpense };
-        }
+        function openAddSkillModal() { let m = document.createElement('div'); m.className = 'modal-overlay'; m.innerHTML = `<div class="modal-content"><h2 class="text-2xl font-bold text-gold mb-4">➕ Yeni Beceri Kursu Ekle</h2><input type="text" id="skillName" placeholder="Kurs Adı" class="mb-3"><input type="number" id="skillPrice" placeholder="Fiyat (₺)" class="mb-3"><input type="text" id="skillDuration" placeholder="Süre (örn: 8 hafta)" class="mb-3"><select id="skillLevel" class="mb-3"><option value="Başlangıç">Başlangıç</option><option value="Orta">Orta</option><option value="İleri">İleri</option></select><input type="text" id="skillImage" placeholder="Emoji" class="mb-4"><div class="flex gap-3"><button onclick="this.closest('.modal-overlay').remove()" class="flex-1 py-2 border border-gray-500 rounded-lg text-gray-400">İptal</button><button id="confirmAddSkill" class="flex-1 btn-gold py-2 rounded-lg">Ekle</button></div></div>`; document.body.appendChild(m); document.getElementById('confirmAddSkill').onclick = () => { let name = document.getElementById('skillName').value; let price = document.getElementById('skillPrice').value; let duration = document.getElementById('skillDuration').value; let level = document.getElementById('skillLevel').value; let img = document.getElementById('skillImage').value; if (name && price) { addSkillCourse(name, price, duration, level, img); m.remove(); } else alert('Tüm alanları doldurun!'); }; }
         
         // --- FOOTER ---
         function renderFooter() {
@@ -193,16 +232,16 @@
                             <div><h3 class="text-gold font-bold text-lg mb-3">Adres</h3><p class="text-gray-400 text-sm">Agora Çarşısı No: Z/31</p><p class="text-gray-400 text-sm">Nilüfer / BURSA</p></div>
                             <div><h3 class="text-gold font-bold text-lg mb-3">Web & Sosyal</h3><p class="text-gray-400 text-sm mb-2"><a href="https://anadolunetwork.tr" target="_blank" class="hover:text-gold transition">anadolunetwork.tr</a></p><p class="text-gray-400 text-sm">Kurucu: Orhan BOYRAZ</p></div>
                         </div>
-                        <div class="pt-6 text-center text-gray-500 text-sm border-t border-[#1e2556]"><p>© 2025 FinTech - Tüm hakları saklıdır. | Yatırım tavsiyesi değildir.</p></div>
+                        <div class="pt-6 text-center text-gray-500 text-sm border-t border-[#1e2556]"><p>© 2025 FinTech - Tüm hakları saklıdır. | Eğitim ve bilgi amaçlıdır, yatırım tavsiyesi değildir.</p></div>
                     </div>
                 </footer>
             `;
         }
         
         // --- RENDER FUNCTIONS ---
-        function renderAuth() { return `<div class="min-h-screen flex items-center justify-center p-4" style="background: linear-gradient(135deg, #0a0f2c 0%, #1a1f4a 100%);"><div class="max-w-md w-full animate-fade-in"><div class="text-center mb-8"><div class="bg-gold w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-chart-line text-3xl text-white"></i></div><h1 class="text-4xl font-bold text-white mb-2">FinTech</h1><p class="text-gray-400">Yapay Zeka Destekli Finansal Yönetim</p><p class="text-gold text-sm mt-2">Kurucu: CFO.Orhan BOYRAZ</p></div><div class="bg-[#12173f] rounded-2xl p-8"><form id="loginForm"><input type="email" id="loginEmail" placeholder="E-posta" class="mb-3" value="orhan@fintech.com"><input type="password" id="loginPassword" placeholder="Şifre" class="mb-4" value="FinTech2025!"><button type="submit" class="w-full btn-gold py-3 rounded-xl">Giriş Yap →</button></form><p class="text-center text-gray-500 text-sm mt-6">Demo: orhan@fintech.com / FinTech2025!</p><div class="mt-4 text-center"><button onclick="purchasePremium()" class="text-gold text-sm border border-gold/50 px-4 py-2 rounded-lg hover:bg-gold/10"><i class="fab fa-whatsapp mr-2"></i>Premium Satın Al</button></div></div></div></div>`; }
+        function renderAuth() { return `<div class="min-h-screen flex items-center justify-center p-4" style="background: linear-gradient(135deg, #0a0f2c 0%, #1a1f4a 100%);"><div class="max-w-md w-full animate-fade-in"><div class="text-center mb-8"><div class="bg-gold w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-chart-line text-3xl text-white"></i></div><h1 class="text-4xl font-bold text-white mb-2">FinTech</h1><p class="text-gray-400">Yapay Zeka Destekli Finansal Yönetim</p><p class="text-gold text-sm mt-2">Kurucu: Orhan BOYRAZ</p></div><div class="bg-[#12173f] rounded-2xl p-8"><form id="loginForm"><input type="email" id="loginEmail" placeholder="E-posta" class="mb-3" value="orhan@fintech.com"><input type="password" id="loginPassword" placeholder="Şifre" class="mb-4" value="FinTech2025!"><button type="submit" class="w-full btn-gold py-3 rounded-xl">Giriş Yap →</button></form><p class="text-center text-gray-500 text-sm mt-6">Demo: orhan@fintech.com / FinTech2025!</p><div class="mt-4 text-center"><button onclick="purchasePremium()" class="text-gold text-sm border border-gold/50 px-4 py-2 rounded-lg hover:bg-gold/10"><i class="fab fa-whatsapp mr-2"></i>Premium Satın Al</button></div></div></div></div>`; }
         
-        function renderSidebar() { return `<aside class="fixed left-0 top-0 h-full w-72 bg-[#0a0f2c] shadow-2xl z-20 overflow-y-auto border-r border-[#1e2556] p-6"><div class="flex items-center gap-3 mb-8"><div class="bg-gold w-10 h-10 rounded-xl flex items-center justify-center"><i class="fas fa-chart-line text-white"></i></div><h1 class="text-2xl font-bold text-gold">FinTech</h1></div><nav class="space-y-1">${[{ id: 'dashboard', icon: 'fa-chart-pie', label: 'Yönetim Paneli' },{ id: 'investments', icon: 'fa-chart-line', label: 'Yatırımlar' },{ id: 'fire', icon: 'fa-fire', label: 'FIRE Planlayıcı' },{ id: 'digitalmarket', icon: 'fa-store', label: 'Dijital Market' },{ id: 'advisory', icon: 'fa-users', label: 'Danışmanlık' },{ id: 'pricing', icon: 'fa-tag', label: 'Paketler' }].map(item => `<div onclick="navigateTo('${item.id}')" class="sidebar-link flex items-center gap-3 px-4 py-3 ${currentPage === item.id ? 'active-page' : 'text-gray-400'}"><i class="fas ${item.icon} w-5"></i><span>${item.label}</span></div>`).join('')}</nav><div class="absolute bottom-0 left-0 right-0 p-6 border-t border-[#1e2556]"><div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-gold flex items-center justify-center"><span class="font-bold text-[#0a0f2c]">${currentUser?.name?.[0]}</span></div><div><p class="font-medium text-white">${currentUser?.name}</p><p class="text-xs text-gold">${currentUser?.paid ? 'Premium Üye' : (currentUser?.role === 'admin' ? 'Kurucu & CEO' : 'Basic Üye')}</p></div></div>${!isPremium() && currentUser?.role !== 'admin' ? `<button onclick="purchasePremium()" class="w-full mb-2 btn-gold py-2 text-sm rounded-lg"><i class="fab fa-whatsapp mr-1"></i>Premium'a Yükselt</button>` : ''}<button onclick="handleLogout()" class="w-full px-4 py-2 text-sm text-red-400 border border-red-400/30 rounded-xl hover:bg-red-400/10">Çıkış Yap</button></div></aside>`; }
+        function renderSidebar() { return `<aside class="fixed left-0 top-0 h-full w-72 bg-[#0a0f2c] shadow-2xl z-20 overflow-y-auto border-r border-[#1e2556] p-6"><div class="flex items-center gap-3 mb-8"><div class="bg-gold w-10 h-10 rounded-xl flex items-center justify-center"><i class="fas fa-chart-line text-white"></i></div><h1 class="text-2xl font-bold text-gold">FinTech</h1></div><nav class="space-y-1">${[{ id: 'dashboard', icon: 'fa-chart-pie', label: 'Yönetim Paneli' },{ id: 'investments', icon: 'fa-chart-line', label: 'Yatırımlar' },{ id: 'fire', icon: 'fa-fire', label: 'FIRE Planlayıcı' },{ id: 'digitalmarket', icon: 'fa-store', label: 'Dijital Market' },{ id: 'skillcourses', icon: 'fa-graduation-cap', label: 'Beceri Eğitimi' },{ id: 'advisory', icon: 'fa-users', label: 'Danışmanlık' },{ id: 'pricing', icon: 'fa-tag', label: 'Paketler' }].map(item => `<div onclick="navigateTo('${item.id}')" class="sidebar-link flex items-center gap-3 px-4 py-3 ${currentPage === item.id ? 'active-page' : 'text-gray-400'}"><i class="fas ${item.icon} w-5"></i><span>${item.label}</span></div>`).join('')}</nav><div class="absolute bottom-0 left-0 right-0 p-6 border-t border-[#1e2556]"><div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-gold flex items-center justify-center"><span class="font-bold text-[#0a0f2c]">${currentUser?.name?.[0]}</span></div><div><p class="font-medium text-white">${currentUser?.name}</p><p class="text-xs text-gold">${currentUser?.paid ? 'Premium Üye' : (currentUser?.role === 'admin' ? 'Kurucu & CEO' : 'Basic Üye')}</p></div></div>${!isPremium() && currentUser?.role !== 'admin' ? `<button onclick="purchasePremium()" class="w-full mb-2 btn-gold py-2 text-sm rounded-lg"><i class="fab fa-whatsapp mr-1"></i>Premium'a Yükselt</button>` : ''}<button onclick="handleLogout()" class="w-full px-4 py-2 text-sm text-red-400 border border-red-400/30 rounded-xl hover:bg-red-400/10">Çıkış Yap</button></div></aside>`; }
         
         function renderDashboard() {
             let netWorth = calculateNetWorth();
@@ -210,7 +249,7 @@
             setTimeout(() => { let ctx = document.getElementById('trendChart')?.getContext('2d'); if(ctx) new Chart(ctx, { type: 'line', data: { labels: ['Oca', 'Şub', 'Mar', 'Nis', 'May'], datasets: [{ label: 'Portföy (₺)', data: [2850000, 2980000, 3120000, 3250000, 3420000], borderColor: '#f5b042', backgroundColor: 'rgba(245,176,66,0.1)', tension: 0.4, fill: true }] }, options: { responsive: true, maintainAspectRatio: true } }); }, 100);
             let content = `<div class="mb-6"><div class="bg-gold-light p-4 rounded-xl border-l-4 border-gold"><p class="text-gold text-sm">🤖 Yapay Zeka Destekli Finansal Yönetim</p><p class="text-white text-lg font-semibold">Hoş geldiniz, ${currentUser.name}</p></div></div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"><div class="card p-6"><p class="text-gray-500">Net Varlık</p><h2 class="text-3xl font-bold text-gold">${formatMoney(netWorth)}</h2></div><div class="card p-6"><p class="text-gray-500">Finansal Sağlık</p><div class="flex justify-between items-center"><div><h2 class="text-4xl font-bold text-gold">${health.score}</h2><p class="text-emerald-500">${health.grade}</p></div><div class="w-16 h-16 rounded-full border-4 border-gold/50 flex items-center justify-center"><span class="text-xl font-bold text-gold">${health.score}</span></div></div></div><div class="card p-6"><p class="text-gray-500">Yapay Zeka Analizi</p><div class="bg-gold-light p-3 rounded-xl mt-2"><p class="text-gold text-sm">📊 Portföyünüz dengeli, düzenli yatırıma devam edin.</p></div></div></div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">Portföy Performansı</h3><canvas id="trendChart" height="200"></canvas></div><div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">Yönetim İşlemleri</h3><div class="space-y-3"><button onclick="openAddInvestmentModal()" class="w-full p-3 bg-gold/20 rounded-xl text-gold hover:bg-gold hover:text-[#0a0f2c] transition"><i class="fas fa-plus mr-2"></i>Yatırım Ekle</button><button onclick="openAddProductModal()" class="w-full p-3 bg-gold/20 rounded-xl text-gold hover:bg-gold hover:text-[#0a0f2c] transition"><i class="fas fa-plus mr-2"></i>Ürün Ekle</button></div></div></div>`;
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">Portföy Performansı</h3><canvas id="trendChart" height="200"></canvas></div><div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">Yönetim İşlemleri</h3><div class="space-y-3"><button onclick="openAddInvestmentModal()" class="w-full p-3 bg-gold/20 rounded-xl text-gold hover:bg-gold hover:text-[#0a0f2c] transition"><i class="fas fa-plus mr-2"></i>Yatırım Ekle</button><button onclick="openAddProductModal()" class="w-full p-3 bg-gold/20 rounded-xl text-gold hover:bg-gold hover:text-[#0a0f2c] transition"><i class="fas fa-plus mr-2"></i>Ürün Ekle</button><button onclick="openAddSkillModal()" class="w-full p-3 bg-gold/20 rounded-xl text-gold hover:bg-gold hover:text-[#0a0f2c] transition"><i class="fas fa-plus mr-2"></i>Beceri Kursu Ekle</button></div></div></div>`;
             if (!isPremium() && currentUser?.role !== 'admin') { content = `<div class="relative">${content}${renderPremiumOverlay('Yönetim paneline ve tüm özelliklere erişmek için Premium paket satın alın.')}</div>`; }
             return content;
         }
@@ -225,20 +264,24 @@
         }
         
         function renderFire() {
-            let fireData = calculateFIRE();
-            let content = `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"><div class="card p-6"><p class="text-gray-500">FIRE Hedefi (25x)</p><h2 class="text-2xl font-bold text-gold">${formatMoney(fireData.fireTarget)}</h2><div class="mt-3 bg-[#1e2556] rounded-full h-2"><div class="bg-gold h-2 rounded-full" style="width: ${Math.min(fireData.progress,100)}%"></div></div><p class="mt-2 text-gold">%${fireData.progress} tamamlandı</p></div><div class="card p-6"><p class="text-gray-500">Aylık Net Gelir (Gelir - Gider)</p><h2 class="text-2xl font-bold text-gold">${formatMoney(fireData.netIncome)}</h2></div></div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6"><div class="card p-6"><p class="text-gray-500">Yıllık Gider</p><p class="text-2xl font-bold text-white">${formatMoney(fireData.annualExpense)}</p></div><div class="card p-6"><p class="text-gray-500">Borç</p><p class="text-2xl font-bold text-red-400">${formatMoney(financeData.liabilities)}</p></div><div class="card p-6"><p class="text-gray-500">Pasif Gelir / Ay</p><p class="text-2xl font-bold text-emerald-400">${formatMoney(financeData.passiveIncome)}</p></div></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"><div class="card p-6"><p class="text-gray-500">Enflasyon (Yıllık)</p><p class="text-2xl font-bold text-gold">%${financeData.inflationRate}</p></div><div class="card p-6"><p class="text-gray-500">Güncel FIRE İlerleme</p><p class="text-2xl font-bold text-gold">${fireData.progress}%</p></div></div>
-            <div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">FIRE Hesaplama Parametreleri</h3><div class="grid grid-cols-2 gap-4"><div><label class="text-sm">Aylık Gelir</label><input type="number" id="incomeInput" value="${financeData.monthlyIncome}" class="bg-[#0f1338]"></div><div><label class="text-sm">Aylık Gider</label><input type="number" id="expenseInput" value="${financeData.monthlyExpense}" class="bg-[#0f1338]"></div><div><label class="text-sm">Yıllık Gider</label><input type="number" id="annualExpenseInput" value="${financeData.annualExpense}" class="bg-[#0f1338]" readonly disabled></div><div><label class="text-sm">Borç</label><input type="number" id="liabilitiesInput" value="${financeData.liabilities}" class="bg-[#0f1338]"></div><div><label class="text-sm">Pasif Gelir/ Ay</label><input type="number" id="passiveInput" value="${financeData.passiveIncome}" class="bg-[#0f1338]"></div><div><label class="text-sm">Enflasyon (%)</label><input type="number" id="inflationInput" value="${financeData.inflationRate}" class="bg-[#0f1338]"></div></div><button id="updateFireBtn" class="mt-4 btn-gold px-4 py-2 rounded-lg"><i class="fas fa-sync-alt mr-2"></i>Güncelle</button></div>`;
+            let fire = calculateFIRE();
+            let content = `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"><div class="card p-6"><p class="text-gray-500">FIRE Hedefi (25x)</p><h2 class="text-2xl font-bold text-gold">${formatMoney(fire.fireTarget)}</h2><div class="mt-3 bg-[#1e2556] rounded-full h-2"><div class="bg-gold h-2 rounded-full" style="width: ${Math.min(fire.progress,100)}%"></div></div><p class="mt-2 text-gold">%${fire.progress} tamamlandı</p></div><div class="card p-6"><p class="text-gray-500">FIRE Seviyesi</p><h2 class="text-xl font-bold text-gold">${fire.fireLevel}</h2><p class="text-emerald-500 text-sm">Hedefe ${fire.yearsToFire} yıl kaldı</p></div></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6"><div class="card p-6"><p class="text-gray-500">Aylık Net Gider (Gider - Pasif)</p><p class="text-2xl font-bold text-white">${formatMoney(fire.netMonthlyExpense)}</p></div><div class="card p-6"><p class="text-gray-500">Borç</p><p class="text-2xl font-bold text-red-400">${formatMoney(financeData.liabilities)}</p></div><div class="card p-6"><p class="text-gray-500">Pasif Gelir / Ay</p><p class="text-2xl font-bold text-emerald-400">${formatMoney(financeData.passiveIncome)}</p></div></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"><div class="card p-6"><p class="text-gray-500">Enflasyon (Yıllık)</p><p class="text-2xl font-bold text-gold">%${financeData.inflationRate}</p></div><div class="card p-6"><p class="text-gray-500">Aylık Tasarruf (Gelir - Gider)</p><p class="text-2xl font-bold text-gold">${formatMoney(financeData.monthlyIncome - financeData.monthlyExpense)}</p></div></div>
+            <div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">FIRE Hesaplama Parametreleri</h3><div class="grid grid-cols-2 gap-4"><div><label class="text-sm">Aylık Gelir</label><input type="number" id="incomeInput" value="${financeData.monthlyIncome}" class="bg-[#0f1338]"></div><div><label class="text-sm">Aylık Gider</label><input type="number" id="expenseInput" value="${financeData.monthlyExpense}" class="bg-[#0f1338]"></div><div><label class="text-sm">Borç</label><input type="number" id="liabilitiesInput" value="${financeData.liabilities}" class="bg-[#0f1338]"></div><div><label class="text-sm">Pasif Gelir/ Ay</label><input type="number" id="passiveInput" value="${financeData.passiveIncome}" class="bg-[#0f1338]"></div><div><label class="text-sm">Enflasyon (%)</label><input type="number" id="inflationInput" value="${financeData.inflationRate}" class="bg-[#0f1338]"></div></div><button id="updateFireBtn" class="mt-4 btn-gold px-4 py-2 rounded-lg"><i class="fas fa-sync-alt mr-2"></i>Güncelle</button></div>`;
             if (!isPremium() && currentUser?.role !== 'admin') { content = `<div class="relative">${content}${renderPremiumOverlay('FIRE hesaplama detaylarına erişmek için Premium paket satın alın.')}</div>`; }
             return content;
         }
         
         function renderDigitalMarket() { return `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">${marketplaceProducts.map(p => `<div class="card p-5 text-center"><div class="text-5xl mb-3">${p.image}</div><h3 class="font-bold text-gold text-base">${p.name}</h3><p class="text-gray-500 text-xs">${p.author}</p><p class="text-xl font-bold text-gold mt-2">${formatMoney(p.price)}</p><a href="${p.whatsappLink}" target="_blank" class="mt-3 w-full btn-gold py-2 rounded-lg inline-block text-sm"><i class="fab fa-whatsapp mr-1"></i>WhatsApp ile Satın Al</a>${currentUser?.role === 'admin' ? `<button onclick="deleteProduct(${p.id})" class="mt-2 text-red-400 text-xs"><i class="fas fa-trash mr-1"></i>Sil</button>` : ''}</div>`).join('')}</div>`; }
         
+        function renderSkillCourses() {
+            return `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">${skillCourses.map(c => `<div class="card p-5 text-center"><div class="text-5xl mb-3">${c.image}</div><h3 class="font-bold text-gold text-base">${c.name}</h3><p class="text-gray-500 text-xs">${c.duration} • ${c.level}</p><p class="text-xl font-bold text-gold mt-2">${formatMoney(c.price)}</p><a href="${c.whatsappLink}" target="_blank" class="mt-3 w-full btn-gold py-2 rounded-lg inline-block text-sm"><i class="fab fa-whatsapp mr-1"></i>WhatsApp ile Kaydol</a>${currentUser?.role === 'admin' ? `<button onclick="deleteSkillCourse(${c.id})" class="mt-2 text-red-400 text-xs"><i class="fas fa-trash mr-1"></i>Sil</button>` : ''}</div>`).join('')}</div>`;
+        }
+        
         function renderAdvisory() {
             return `<div class="card p-6 mb-6"><h3 class="font-semibold text-gold text-lg mb-4">Danışmanlık Hizmetleri (WhatsApp)</h3><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">${consultingServices.map(s => `<a href="https://wa.me/905418660202?text=${encodeURIComponent(s.whatsapp)}" target="_blank" class="p-4 bg-gold-light rounded-xl text-center hover:bg-gold/20 transition"><i class="fas ${s.icon} text-3xl text-gold mb-2"></i><p class="font-semibold text-white text-sm">${s.name}</p><p class="text-gold text-xs">${s.price}</p><p class="text-gray-500 text-xs mt-1">${s.desc}</p></a>`).join('')}</div></div>
-            <div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">🤖 Yapay Zeka Finansal Asistan (Offline)</h3><div id="chatMessages" class="h-64 overflow-y-auto mb-4 p-3 bg-[#0f1338] rounded-xl"><div class="mb-3"><div class="bg-gold-light rounded-lg p-3 inline-block"><p class="text-sm text-gold">🤖 Merhaba! FinTech AI finansal asistanıyım. Yatırım, FIRE, borç yönetimi, tasarruf, enflasyon ve pasif gelir hakkında sorular sorabilirsiniz. (İnternet gerekmez)</p></div></div></div><div class="flex gap-2"><input type="text" id="chatInput" placeholder="Sorunuzu yazın..." class="flex-1 px-4 py-2 rounded-xl"><button id="sendChat" class="px-4 py-2 bg-gold text-[#0a0f2c] rounded-xl font-semibold"><i class="fas fa-robot mr-2"></i>AI'ya Sor</button></div></div>`;
+            <div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">🤖 Yapay Zeka Finansal Asistan (Offline)</h3><div id="chatMessages" class="h-64 overflow-y-auto mb-4 p-3 bg-[#0f1338] rounded-xl"><div class="mb-3"><div class="bg-gold-light rounded-lg p-3 inline-block"><p class="text-sm text-gold">🤖 Merhaba! FinTech AI finansal asistanıyım. Yatırım, FIRE, pasif gelir, borç, beceri eğitimleri hakkında sorular sorabilirsiniz.</p></div></div></div><div class="flex gap-2"><input type="text" id="chatInput" placeholder="Sorunuzu yazın..." class="flex-1 px-4 py-2 rounded-xl"><button id="sendChat" class="px-4 py-2 bg-gold text-[#0a0f2c] rounded-xl font-semibold"><i class="fas fa-robot mr-2"></i>AI'ya Sor</button></div></div>`;
         }
         
         function renderPricing() { return `<div class="grid grid-cols-1 md:grid-cols-3 gap-6">${pricingPlans.map(p => `<div class="card p-8 text-center ${p.popular ? 'border-2 border-gold relative' : ''}">${p.popular ? '<div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gold text-[#0a0f2c] px-3 py-1 rounded-full text-xs font-bold">Popüler</div>' : ''}<h3 class="text-2xl font-bold text-gold">${p.name}</h3><p class="text-4xl font-bold text-white mt-4">${p.price === 0 ? '₺0' : formatMoney(p.price)}<span class="text-base">${p.price !== 0 ? '/ay' : ''}</span></p><ul class="mt-6 space-y-2 text-left">${p.features.map(f => `<li class="text-sm text-gray-300"><i class="fas fa-check text-gold mr-2"></i>${f}</li>`).join('')}</ul><a href="https://wa.me/905418660202?text=${encodeURIComponent(p.whatsapp)}" target="_blank" class="mt-8 w-full py-2 border-2 border-gold text-gold rounded-lg inline-block hover:bg-gold hover:text-[#0a0f2c] transition text-center">WhatsApp ile Başla</a></div>`).join('')}</div>`; }
@@ -247,14 +290,12 @@
         
         async function renderApp() {
             if (!currentUser) { document.getElementById('root').innerHTML = renderAuth(); document.getElementById('loginForm')?.addEventListener('submit', (e) => { e.preventDefault(); if(handleLogin(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value)) renderApp(); else alert('Hatalı giriş!'); }); return; }
-            let mainContent = `<div class="flex min-h-screen"><div>${renderSidebar()}</div><main class="flex-1 ml-72 p-8"><div class="max-w-7xl mx-auto animate-fade-in"><div class="text-center mb-4"><p class="text-gold text-sm tracking-wider">🤖 YAPAY ZEKA DESTEKLİ FİNANSAL YÖNETİM WEB UYGULAMASI | OFFLINE AI</p></div>${currentPage === 'dashboard' ? renderDashboard() : currentPage === 'investments' ? renderInvestments() : currentPage === 'fire' ? renderFire() : currentPage === 'digitalmarket' ? renderDigitalMarket() : currentPage === 'advisory' ? renderAdvisory() : renderPricing()}${renderFooter()}</div></main></div>`;
+            let mainContent = `<div class="flex min-h-screen"><div>${renderSidebar()}</div><main class="flex-1 ml-72 p-8"><div class="max-w-7xl mx-auto animate-fade-in"><div class="text-center mb-4"><p class="text-gold text-sm tracking-wider">🤖 YAPAY ZEKA DESTEKLİ FİNANSAL YÖNETİM WEB UYGULAMASI | OFFLINE AI</p></div>${currentPage === 'dashboard' ? renderDashboard() : currentPage === 'investments' ? renderInvestments() : currentPage === 'fire' ? renderFire() : currentPage === 'digitalmarket' ? renderDigitalMarket() : currentPage === 'skillcourses' ? renderSkillCourses() : currentPage === 'advisory' ? renderAdvisory() : renderPricing()}${renderFooter()}</div></main></div>`;
             document.getElementById('root').innerHTML = mainContent;
             if(currentPage === 'fire'){ 
                 document.getElementById('updateFireBtn')?.addEventListener('click',()=>{ 
                     financeData.monthlyIncome=+document.getElementById('incomeInput').value; 
                     financeData.monthlyExpense=+document.getElementById('expenseInput').value; 
-                    financeData.annualExpense = financeData.monthlyExpense * 12;
-                    document.getElementById('annualExpenseInput').value = financeData.annualExpense;
                     financeData.liabilities=+document.getElementById('liabilitiesInput').value; 
                     financeData.passiveIncome=+document.getElementById('passiveInput').value; 
                     financeData.inflationRate=+document.getElementById('inflationInput').value; 
@@ -275,7 +316,7 @@
                         chatDiv.removeChild(chatDiv.lastChild); 
                         chatDiv.innerHTML += `<div class="mb-3"><div class="bg-gold-light rounded-lg p-3 inline-block"><p class="text-sm text-gold">🤖 ${reply}</p></div></div>`; 
                         chatDiv.scrollTop = chatDiv.scrollHeight; 
-                    }, 500); 
+                    }, 300); 
                     input.value = ''; 
                 });
             }
