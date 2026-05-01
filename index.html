@@ -46,11 +46,11 @@
         let currentPage = 'dashboard';
         
         // --- ADMIN AUTH (Şifreli) ---
-        const ADMIN_EMAIL = 'orhan@fintech.com';
+        const ADMIN_EMAIL = 'orhanboyraz0216@gmail.com';
         const ADMIN_PASSWORD = 'FinTech2025!';
         let users = [
             { id: 1, email: ADMIN_EMAIL, password: ADMIN_PASSWORD, name: 'Orhan BOYRAZ', tier: 'premium', role: 'admin', avatar: 'O', phone: '0541 866 0202', paid: true },
-            { id: 2, email: 'demo@fintech.com', password: 'demo123', name: 'Demo Kullanıcı', tier: 'basic', role: 'user', avatar: 'D', paid: false }
+            { id: 2, email: 'demo@gmail.com', password: 'demo123', name: 'Demo Kullanıcı', tier: 'basic', role: 'user', avatar: 'D', paid: false }
         ];
         
         // --- YATIRIMLAR ---
@@ -60,6 +60,7 @@
             { id: 3, name: 'Altın', symbol: 'XAU', type: 'gold', value: 525000, change: 22.3 },
             { id: 4, name: 'BIST Hisse', symbol: 'XU100', type: 'stock', value: 425000, change: 12.3 },
             { id: 5, name: 'ABD Borsası', symbol: 'S&P500', type: 'usstock', value: 650000, change: 15.8 },
+            { id: 5, name: 'Bitcoin', symbol: 'Bitcoin', type: 'usstock', value: 600000, change: 15.8 },
             { id: 6, name: 'Eurobond', symbol: 'EUB', type: 'eurobond', value: 650000, change: 8.2 },
             { id: 7, name: 'Girişim', symbol: 'VC', type: 'venture', value: 250000, change: 25.0 }
         ];
@@ -90,8 +91,8 @@
             monthlyExpense: 45000,
             assets: 4525000,
             liabilities: 850000,
-            passiveIncome: 12500,
-            inflationRate: 45
+            passiveIncome: 42500,
+            inflationRate: 35
         };
         
         // --- DOĞRU FIRE HESAPLAMA (Pasif gelir giderden düşülür) ---
@@ -160,6 +161,7 @@
             { name: 'CFO Danışmanlık', price: '1.499₺/saat', icon: 'fa-chart-line', desc: 'Kurumsal finans yönetimi', whatsapp: 'Merhaba, CFO danışmanlık hizmeti almak istiyorum.' },
             { name: 'Liderlik Danışmanlığı', price: '1.299₺/saat', icon: 'fa-crown', desc: 'Yönetici koçluğu ve liderlik gelişimi', whatsapp: 'Merhaba, liderlik danışmanlığı almak istiyorum.' },
             { name: 'Mental Sağlık Danışmanlığı', price: '750₺/seans', icon: 'fa-brain', desc: 'Stres yönetimi ve psikolojik destek', whatsapp: 'Merhaba, mental sağlık danışmanlığı almak istiyorum.' },
+            { name: 'FİRE Danışmanlığı', price: '1.750₺/seans', icon: 'fa-brain', desc: 'Fire yol haritası ve portföy kurmak', whatsapp: 'Merhaba, FİRE danışmanlığı almak istiyorum.' },
             { name: 'İş Kurma Danışmanlığı', price: '2.499₺', icon: 'fa-briefcase', desc: 'Girişimcilik ve iş kurma rehberliği', whatsapp: 'Merhaba, iş kurma danışmanlığı almak istiyorum.' },
             { name: 'FIRE Danışmanlık', price: '1.999₺', icon: 'fa-fire', desc: 'Finansal bağımsızlık için özel yol haritası', whatsapp: 'Merhaba, FIRE danışmanlığı almak istiyorum.' }
         ];
@@ -180,7 +182,7 @@
                 return "🎓 FinTech platformunda Dijital Pazarlama, Finansal Okuryazarlık, Yatırım Analizi ve Girişimcilik eğitimleri bulunmaktadır. Bu eğitimlerle finansal okuryazarlığınızı artırabilir ve kariyerinizde yeni beceriler kazanabilirsiniz.";
             }
             else {
-                return "🤖 FinTech AI asistanı olarak size yatırım, FIRE, pasif gelir, beceri eğitimleri ve finansal planlama konularında yardımcı olabilirim. Lütfen bu konularda sorular sorun.";
+                return "🤖 FinTech AI asistanı olarak size yatırım, FIRE, pasif gelir, borç yönetimi, beceri eğitimleri ve finansal planlama konularında yardımcı olabilirim. Lütfen bu konularda sorular sorun.";
             }
         }
         
@@ -230,7 +232,7 @@
                             <div><h3 class="text-gold font-bold text-lg mb-3">FinTech</h3><p class="text-gray-400 text-sm">Yapay Zeka Destekli Finansal Yönetim Platformu</p></div>
                             <div><h3 class="text-gold font-bold text-lg mb-3">İletişim</h3><p class="text-gray-400 text-sm flex items-center gap-2 mb-2"><i class="fab fa-whatsapp text-gold"></i> WhatsApp: 0541 866 0202</p><p class="text-gray-400 text-sm flex items-center gap-2 mb-2"><i class="fas fa-phone text-gold"></i> Tel: 0541 866 0202</p><p class="text-gray-400 text-sm flex items-center gap-2 mb-2"><i class="fas fa-envelope text-gold"></i> orhanboyraz0216@gmail.com</p></div>
                             <div><h3 class="text-gold font-bold text-lg mb-3">Adres</h3><p class="text-gray-400 text-sm">Agora Çarşısı No: Z/31</p><p class="text-gray-400 text-sm">Nilüfer / BURSA</p></div>
-                            <div><h3 class="text-gold font-bold text-lg mb-3">Web & Sosyal</h3><p class="text-gray-400 text-sm mb-2"><a href="https://anadolunetwork.tr" target="_blank" class="hover:text-gold transition">anadolunetwork.tr</a></p><p class="text-gray-400 text-sm">Kurucu: Orhan BOYRAZ</p></div>
+                            <div><h3 class="text-gold font-bold text-lg mb-3">Web & Sosyal</h3><p class="text-gray-400 text-sm mb-2"><a href="https://anadolunetwork.tr" target="_blank" class="hover:text-gold transition">anadolunetwork.tr</a></p><p class="text-gray-400 text-sm">Kurucu: CFO.Orhan BOYRAZ</p></div>
                         </div>
                         <div class="pt-6 text-center text-gray-500 text-sm border-t border-[#1e2556]"><p>© 2025 FinTech - Tüm hakları saklıdır. | Eğitim ve bilgi amaçlıdır, yatırım tavsiyesi değildir.</p></div>
                     </div>
@@ -239,7 +241,7 @@
         }
         
         // --- RENDER FUNCTIONS ---
-        function renderAuth() { return `<div class="min-h-screen flex items-center justify-center p-4" style="background: linear-gradient(135deg, #0a0f2c 0%, #1a1f4a 100%);"><div class="max-w-md w-full animate-fade-in"><div class="text-center mb-8"><div class="bg-gold w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-chart-line text-3xl text-white"></i></div><h1 class="text-4xl font-bold text-white mb-2">FinTech</h1><p class="text-gray-400">Yapay Zeka Destekli Finansal Yönetim</p><p class="text-gold text-sm mt-2">Kurucu: Orhan BOYRAZ</p></div><div class="bg-[#12173f] rounded-2xl p-8"><form id="loginForm"><input type="email" id="loginEmail" placeholder="E-posta" class="mb-3" value="orhan@fintech.com"><input type="password" id="loginPassword" placeholder="Şifre" class="mb-4" value="FinTech2025!"><button type="submit" class="w-full btn-gold py-3 rounded-xl">Giriş Yap →</button></form><p class="text-center text-gray-500 text-sm mt-6">Demo: orhan@fintech.com / FinTech2025!</p><div class="mt-4 text-center"><button onclick="purchasePremium()" class="text-gold text-sm border border-gold/50 px-4 py-2 rounded-lg hover:bg-gold/10"><i class="fab fa-whatsapp mr-2"></i>Premium Satın Al</button></div></div></div></div>`; }
+        function renderAuth() { return `<div class="min-h-screen flex items-center justify-center p-4" style="background: linear-gradient(135deg, #0a0f2c 0%, #1a1f4a 100%);"><div class="max-w-md w-full animate-fade-in"><div class="text-center mb-8"><div class="bg-gold w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-chart-line text-3xl text-white"></i></div><h1 class="text-4xl font-bold text-white mb-2">FinTech</h1><p class="text-gray-400">Yapay Zeka Destekli Finansal Yönetim</p><p class="text-gold text-sm mt-2">Kurucu: CFO.Orhan BOYRAZ</p></div><div class="bg-[#12173f] rounded-2xl p-8"><form id="loginForm"><input type="email" id="loginEmail" placeholder="E-posta" class="mb-3" value="orhanboyraz0216@gmail.com"><input type="password" id="loginPassword" placeholder="Şifre" class="mb-4" value="FinTech2025!"><button type="submit" class="w-full btn-gold py-3 rounded-xl">Giriş Yap →</button></form><p class="text-center text-gray-500 text-sm mt-6">Demo: orhan@fintech.com / FinTech2025!</p><div class="mt-4 text-center"><button onclick="purchasePremium()" class="text-gold text-sm border border-gold/50 px-4 py-2 rounded-lg hover:bg-gold/10"><i class="fab fa-whatsapp mr-2"></i>Premium Satın Al</button></div></div></div></div>`; }
         
         function renderSidebar() { return `<aside class="fixed left-0 top-0 h-full w-72 bg-[#0a0f2c] shadow-2xl z-20 overflow-y-auto border-r border-[#1e2556] p-6"><div class="flex items-center gap-3 mb-8"><div class="bg-gold w-10 h-10 rounded-xl flex items-center justify-center"><i class="fas fa-chart-line text-white"></i></div><h1 class="text-2xl font-bold text-gold">FinTech</h1></div><nav class="space-y-1">${[{ id: 'dashboard', icon: 'fa-chart-pie', label: 'Yönetim Paneli' },{ id: 'investments', icon: 'fa-chart-line', label: 'Yatırımlar' },{ id: 'fire', icon: 'fa-fire', label: 'FIRE Planlayıcı' },{ id: 'digitalmarket', icon: 'fa-store', label: 'Dijital Market' },{ id: 'skillcourses', icon: 'fa-graduation-cap', label: 'Beceri Eğitimi' },{ id: 'advisory', icon: 'fa-users', label: 'Danışmanlık' },{ id: 'pricing', icon: 'fa-tag', label: 'Paketler' }].map(item => `<div onclick="navigateTo('${item.id}')" class="sidebar-link flex items-center gap-3 px-4 py-3 ${currentPage === item.id ? 'active-page' : 'text-gray-400'}"><i class="fas ${item.icon} w-5"></i><span>${item.label}</span></div>`).join('')}</nav><div class="absolute bottom-0 left-0 right-0 p-6 border-t border-[#1e2556]"><div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-gold flex items-center justify-center"><span class="font-bold text-[#0a0f2c]">${currentUser?.name?.[0]}</span></div><div><p class="font-medium text-white">${currentUser?.name}</p><p class="text-xs text-gold">${currentUser?.paid ? 'Premium Üye' : (currentUser?.role === 'admin' ? 'Kurucu & CEO' : 'Basic Üye')}</p></div></div>${!isPremium() && currentUser?.role !== 'admin' ? `<button onclick="purchasePremium()" class="w-full mb-2 btn-gold py-2 text-sm rounded-lg"><i class="fab fa-whatsapp mr-1"></i>Premium'a Yükselt</button>` : ''}<button onclick="handleLogout()" class="w-full px-4 py-2 text-sm text-red-400 border border-red-400/30 rounded-xl hover:bg-red-400/10">Çıkış Yap</button></div></aside>`; }
         
