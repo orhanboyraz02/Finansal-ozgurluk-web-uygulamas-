@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="FinTech - Yapay Zeka Destekli Finansal Yönetim Web Uygulaması | Gemini AI API Entegrasyonu">
+    <meta name="description" content="FinTech - Yapay Zeka Destekli Finansal Yönetim Web Uygulaması">
     <meta name="theme-color" content="#0a0f2c">
     <title>FinTech | Yapay Zeka Destekli Finansal Yönetim</title>
     
-    <!-- Tailwind CSS + Fonts + Icons + Chart.js -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -35,7 +34,6 @@
         .animate-fade-in { animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .toast { position: fixed; bottom: 20px; right: 20px; background: #f5b042; color: #0a0f2c; padding: 12px 24px; border-radius: 12px; z-index: 1000; animation: fadeIn 0.3s ease; }
-        .premium-blur { filter: blur(4px); pointer-events: none; user-select: none; }
         .premium-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 10; border-radius: 1.5rem; flex-direction: column; text-align: center; padding: 2rem; }
     </style>
 </head>
@@ -55,7 +53,7 @@
             { id: 2, email: 'demo@fintech.com', password: 'demo123', name: 'Demo Kullanıcı', tier: 'basic', role: 'user', avatar: 'D', paid: false }
         ];
         
-        // --- YATIRIMLAR (Altın, Hisse, ABD Borsası eklendi) ---
+        // --- YATIRIMLAR ---
         let investments = [
             { id: 1, name: 'Nakit', symbol: 'TRY', type: 'cash', value: 350000, change: 0 },
             { id: 2, name: 'Emlak', symbol: 'PROP', type: 'realestate', value: 2850000, change: 18.5 },
@@ -78,11 +76,11 @@
             { id: 8, name: 'Vergi Optimizasyonu Kitabı', type: 'ebook', price: 99, sales: 567, rating: 4.5, image: '📊', author: 'Orhan BOYRAZ', whatsappLink: 'https://wa.me/905418660202?text=Merhaba, Vergi Optimizasyonu Kitabını satın almak istiyorum.' }
         ];
         
-        // --- FIRE HESAPLAMA İÇİN (Yıllık Gider eklendi) ---
+        // --- FIRE HESAPLAMA ---
         let financeData = {
             monthlyIncome: 85000,
             monthlyExpense: 45000,
-            annualExpense: 540000,   // Yıllık gider (12 x 45000)
+            annualExpense: 540000,
             assets: 4525000,
             liabilities: 850000,
             passiveIncome: 12500,
@@ -108,7 +106,33 @@
             { name: 'FIRE Danışmanlık', price: '1.999₺', icon: 'fa-fire', desc: 'Finansal bağımsızlık için özel yol haritası', whatsapp: 'Merhaba, FIRE danışmanlığı almak istiyorum.' }
         ];
         
-        // --- YARDIMCI FONKSİYONLAR ---
+        // --- OFFLINE YAPAY ZEKA ASİSTANI (Gemini yok, offline çalışır) ---
+        function getOfflineAIResponse(userMessage) {
+            const msg = userMessage.toLowerCase();
+            
+            if (msg.includes('fire') || msg.includes('finansal bağımsızlık')) {
+                return "🔥 FIRE (Financial Independence Retire Early), finansal bağımsızlığa erken ulaşmayı hedefleyen bir harekettir. 25 kat yıllık gider hedefiyle planlama yapabilirsiniz. Mevcut verilerinize göre FIRE hedefinize ulaşmanız için önerilen aylık tasarruf miktarını hesaplayabiliriz.";
+            }
+            else if (msg.includes('yatırım') || msg.includes('portföy')) {
+                return "📈 Yatırım portföyünüzde çeşitlendirme önemlidir. Altın, hisse, gayrimenkul ve nakit dengesi kurarak riskinizi dağıtabilirsiniz. Uzun vadeli yatırım enflasyona karşı en etkili korunma yöntemidir.";
+            }
+            else if (msg.includes('borç')) {
+                return "💰 Borç yönetiminde öncelik yüksek faizli borçları kapatmak olmalıdır. Kredi kartı borçları, tüketici kredileri gibi yüksek faizli borçlarınız varsa önce bunları kapatmanızı öneririm.";
+            }
+            else if (msg.includes('tasarruf')) {
+                return "📊 Tasarruf oranınız, finansal bağımsızlığa ulaşma hızınızı belirleyen en önemli faktördür. Gelirinizin en az %20'sini tasarruf etmeye çalışın. Mevcut tasarruf oranınızı artırmak için küçük harcamalarınızı gözden geçirebilirsiniz.";
+            }
+            else if (msg.includes('enflasyon')) {
+                return "📉 Enflasyon karşısında paranızı korumak için altın, döviz, gayrimenkul ve hisse senedi gibi varlıklara yatırım yapmalısınız. Mevcut enflasyon oranı %" + financeData.inflationRate + " seviyesinde.";
+            }
+            else if (msg.includes('pasif gelir')) {
+                return "💸 Pasif gelir, aktif çalışmadan elde edilen gelirdir. Kira geliri, temettü, faiz, dijital ürün satışları pasif gelir kaynaklarına örnektir. Mevcut pasif geliriniz aylık " + formatMoney(financeData.passiveIncome) + " seviyesinde.";
+            }
+            else {
+                return "🤖 FinTech AI asistanı olarak size yatırım, FIRE, borç yönetimi, tasarruf stratejileri ve finansal planlama konularında yardımcı olabilirim. Lütfen bu konularda sorular sorun.";
+            }
+        }
+        
         function formatMoney(amount) { return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 0 }).format(amount); }
         function calculateNetWorth() { return investments.reduce((s, i) => s + i.value, 0) + (financeData.monthlyIncome - financeData.monthlyExpense); }
         
@@ -128,9 +152,9 @@
         function handleLogout() { currentUser = null; localStorage.removeItem('fintech_user'); renderApp(); }
         
         function isPremium() { return currentUser?.paid === true || currentUser?.tier === 'premium' || currentUser?.role === 'admin'; }
-        function purchasePremium() { window.open('https://wa.me/905418660202?text=Merhaba, Premium panel satın almak istiyorum. FinTech platformuna üye olmak ve tüm özellikleri kullanmak istiyorum.', '_blank'); }
+        function purchasePremium() { window.open('https://wa.me/905418660202?text=Merhaba, Premium panel satın almak istiyorum.', '_blank'); }
         
-        function renderPremiumOverlay(message = 'Bu içeriği görüntülemek için Premium paket satın almalısınız.') {
+        function renderPremiumOverlay(message) {
             return `<div class="premium-overlay"><i class="fas fa-crown text-gold text-5xl mb-4"></i><h3 class="text-gold text-xl font-bold mb-2">Premium İçerik</h3><p class="text-gray-300 mb-4">${message}</p><button onclick="purchasePremium()" class="btn-gold px-6 py-3 rounded-lg"><i class="fab fa-whatsapp mr-2"></i>WhatsApp ile Satın Al</button></div>`;
         }
         
@@ -143,7 +167,6 @@
         function openAddInvestmentModal() { let m = document.createElement('div'); m.className = 'modal-overlay'; m.innerHTML = `<div class="modal-content"><h2 class="text-2xl font-bold text-gold mb-4">➕ Yeni Yatırım Ekle</h2><input type="text" id="invName" placeholder="Yatırım Adı" class="mb-3"><select id="invType" class="mb-3"><option value="cash">Nakit</option><option value="realestate">Emlak</option><option value="gold">Altın</option><option value="stock">Hisse</option><option value="usstock">ABD Borsası</option><option value="fund">Fon</option><option value="eurobond">Eurobond</option><option value="venture">Girişim</option></select><input type="number" id="invValue" placeholder="Değer (₺)" class="mb-3"><input type="number" id="invChange" placeholder="Değişim (%)" class="mb-4"><div class="flex gap-3"><button onclick="this.closest('.modal-overlay').remove()" class="flex-1 py-2 border border-gray-500 rounded-lg text-gray-400">İptal</button><button id="confirmAddInv" class="flex-1 btn-gold py-2 rounded-lg">Ekle</button></div></div>`; document.body.appendChild(m); document.getElementById('confirmAddInv').onclick = () => { let name = document.getElementById('invName').value; let type = document.getElementById('invType').value; let val = document.getElementById('invValue').value; let chg = document.getElementById('invChange').value; if (name && val && chg) { addInvestment(name, type.toUpperCase(), type, val, chg); m.remove(); } else alert('Tüm alanları doldurun!'); }; }
         function openAddProductModal() { let m = document.createElement('div'); m.className = 'modal-overlay'; m.innerHTML = `<div class="modal-content"><h2 class="text-2xl font-bold text-gold mb-4">➕ Yeni Ürün Ekle</h2><input type="text" id="prodName" placeholder="Ürün Adı" class="mb-3"><select id="prodType" class="mb-3"><option value="course">Eğitim</option><option value="ebook">E-Kitap</option></select><input type="number" id="prodPrice" placeholder="Fiyat (₺)" class="mb-3"><input type="text" id="prodImage" placeholder="Emoji" class="mb-3"><input type="text" id="prodAuthor" placeholder="Yazar" class="mb-4"><div class="flex gap-3"><button onclick="this.closest('.modal-overlay').remove()" class="flex-1 py-2 border border-gray-500 rounded-lg text-gray-400">İptal</button><button id="confirmAddProd" class="flex-1 btn-gold py-2 rounded-lg">Ekle</button></div></div>`; document.body.appendChild(m); document.getElementById('confirmAddProd').onclick = () => { let name = document.getElementById('prodName').value; let type = document.getElementById('prodType').value; let price = document.getElementById('prodPrice').value; let img = document.getElementById('prodImage').value; let author = document.getElementById('prodAuthor').value; if (name && price) { addProduct(name, type, price, img, author || 'FinTech'); m.remove(); } else alert('Tüm alanları doldurun!'); }; }
         
-        // --- FIRE HESAPLAMA (Yıllık Gider ve FIRE Danışmanlığı dahil) ---
         function calculateFIRE() {
             let netIncome = financeData.monthlyIncome - financeData.monthlyExpense;
             financeData.netIncome = netIncome;
@@ -157,42 +180,6 @@
             let currentSavings = netAssets + (adjustedNetIncome + adjustedPassive) * 0.7;
             let progress = (currentSavings / fireTarget * 100).toFixed(1);
             return { fireTarget, currentSavings, progress, realExpense, netIncome, annualExpense: financeData.annualExpense };
-        }
-        
-        // --- GEMINI API (Çalışması için API anahtarı gerekli) ---
-        let geminiApiKey = localStorage.getItem('gemini_api_key') || '';
-        function setGeminiApiKey(key) { geminiApiKey = key; localStorage.setItem('gemini_api_key', key); showToast('✅ Gemini API anahtarı kaydedildi'); }
-        
-        async function askGemini(userMessage) {
-            if (!geminiApiKey || geminiApiKey === 'YOUR_GEMINI_API_KEY') {
-                return '⚠️ Lütfen önce Gemini API anahtarınızı girin. Ayarlar (profil) bölümünden ekleyebilirsiniz. Google AI Studio\'dan ücretsiz API anahtarı alabilirsiniz.';
-            }
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
-            try {
-                let response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: `Finansal danışman olarak Türkçe yanıt ver. Şu soruyu cevapla: ${userMessage}` }] }] })
-                });
-                if (!response.ok) {
-                    if (response.status === 403 || response.status === 401) return '❌ API anahtarı geçersiz. Lütfen doğru anahtarı girin.';
-                    throw new Error('API hatası');
-                }
-                let data = await response.json();
-                return data.candidates?.[0]?.content?.parts?.[0]?.text || 'Gemini yanıt veremedi. Lütfen tekrar deneyin.';
-            } catch (error) { return '🔌 Gemini API bağlantı hatası. İnternet bağlantınızı kontrol edin.'; }
-        }
-        
-        function openApiKeyModal() {
-            let m = document.createElement('div'); m.className = 'modal-overlay';
-            m.innerHTML = `<div class="modal-content"><h2 class="text-2xl font-bold text-gold mb-4">🔑 Gemini API Anahtarı</h2><p class="text-gray-400 text-sm mb-3">AI asistanını kullanmak için Google AI Studio\'dan ücretsiz API anahtarı alın:<br/><a href="https://aistudio.google.com/" target="_blank" class="text-gold underline">https://aistudio.google.com/</a></p><input type="text" id="apiKeyInput" placeholder="API Anahtarınızı girin" value="${geminiApiKey}" class="mb-4"><div class="flex gap-3"><button onclick="this.closest('.modal-overlay').remove()" class="flex-1 py-2 border border-gray-500 rounded-lg text-gray-400">İptal</button><button id="saveApiKey" class="flex-1 btn-gold py-2 rounded-lg">Kaydet</button></div></div>`;
-            document.body.appendChild(m);
-            document.getElementById('saveApiKey').onclick = () => {
-                let key = document.getElementById('apiKeyInput').value;
-                if (key) setGeminiApiKey(key);
-                m.remove();
-                showToast('API anahtarı kaydedildi, AI asistanını kullanabilirsiniz.');
-            };
         }
         
         // --- FOOTER ---
@@ -212,10 +199,10 @@
             `;
         }
         
-        // --- RENDER COMPONENTS ---
-        function renderAuth() { return `<div class="min-h-screen flex items-center justify-center p-4" style="background: linear-gradient(135deg, #0a0f2c 0%, #1a1f4a 100%);"><div class="max-w-md w-full animate-fade-in"><div class="text-center mb-8"><div class="bg-gold w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-chart-line text-3xl text-white"></i></div><h1 class="text-4xl font-bold text-white mb-2">FinTech</h1><p class="text-gray-400">Yapay Zeka Destekli Finansal Yönetim</p><p class="text-gold text-sm mt-2">Kurucu: Orhan BOYRAZ</p></div><div class="bg-[#12173f] rounded-2xl p-8"><form id="loginForm"><input type="email" id="loginEmail" placeholder="E-posta" class="mb-3" value="orhan@fintech.com"><input type="password" id="loginPassword" placeholder="Şifre" class="mb-4" value="FinTech2025!"><button type="submit" class="w-full btn-gold py-3 rounded-xl">Giriş Yap →</button></form><p class="text-center text-gray-500 text-sm mt-6">Demo: orhan@fintech.com / FinTech2025! | demo@fintech.com / demo123 (Basic)</p><div class="mt-4 text-center"><button onclick="purchasePremium()" class="text-gold text-sm border border-gold/50 px-4 py-2 rounded-lg hover:bg-gold/10"><i class="fab fa-whatsapp mr-2"></i>Premium Satın Al</button></div></div></div></div>`; }
+        // --- RENDER FUNCTIONS ---
+        function renderAuth() { return `<div class="min-h-screen flex items-center justify-center p-4" style="background: linear-gradient(135deg, #0a0f2c 0%, #1a1f4a 100%);"><div class="max-w-md w-full animate-fade-in"><div class="text-center mb-8"><div class="bg-gold w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-chart-line text-3xl text-white"></i></div><h1 class="text-4xl font-bold text-white mb-2">FinTech</h1><p class="text-gray-400">Yapay Zeka Destekli Finansal Yönetim</p><p class="text-gold text-sm mt-2">Kurucu: Orhan BOYRAZ</p></div><div class="bg-[#12173f] rounded-2xl p-8"><form id="loginForm"><input type="email" id="loginEmail" placeholder="E-posta" class="mb-3" value="orhan@fintech.com"><input type="password" id="loginPassword" placeholder="Şifre" class="mb-4" value="FinTech2025!"><button type="submit" class="w-full btn-gold py-3 rounded-xl">Giriş Yap →</button></form><p class="text-center text-gray-500 text-sm mt-6">Demo: orhan@fintech.com / FinTech2025!</p><div class="mt-4 text-center"><button onclick="purchasePremium()" class="text-gold text-sm border border-gold/50 px-4 py-2 rounded-lg hover:bg-gold/10"><i class="fab fa-whatsapp mr-2"></i>Premium Satın Al</button></div></div></div></div>`; }
         
-        function renderSidebar() { return `<aside class="fixed left-0 top-0 h-full w-72 bg-[#0a0f2c] shadow-2xl z-20 overflow-y-auto border-r border-[#1e2556] p-6"><div class="flex items-center gap-3 mb-8"><div class="bg-gold w-10 h-10 rounded-xl flex items-center justify-center"><i class="fas fa-chart-line text-white"></i></div><h1 class="text-2xl font-bold text-gold">FinTech</h1></div><nav class="space-y-1">${[{ id: 'dashboard', icon: 'fa-chart-pie', label: 'Yönetim Paneli' },{ id: 'investments', icon: 'fa-chart-line', label: 'Yatırımlar' },{ id: 'fire', icon: 'fa-fire', label: 'FIRE Planlayıcı' },{ id: 'digitalmarket', icon: 'fa-store', label: 'Dijital Market' },{ id: 'advisory', icon: 'fa-users', label: 'Danışmanlık' },{ id: 'pricing', icon: 'fa-tag', label: 'Paketler' }].map(item => `<div onclick="navigateTo('${item.id}')" class="sidebar-link flex items-center gap-3 px-4 py-3 ${currentPage === item.id ? 'active-page' : 'text-gray-400'}"><i class="fas ${item.icon} w-5"></i><span>${item.label}</span></div>`).join('')}</nav><div class="absolute bottom-0 left-0 right-0 p-6 border-t border-[#1e2556]"><div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-gold flex items-center justify-center"><span class="font-bold text-[#0a0f2c]">${currentUser?.name?.[0]}</span></div><div><p class="font-medium text-white">${currentUser?.name}</p><p class="text-xs text-gold">${currentUser?.paid ? 'Premium Üye' : (currentUser?.role === 'admin' ? 'Kurucu & CEO' : 'Basic Üye')}</p></div></div>${!isPremium() && currentUser?.role !== 'admin' ? `<button onclick="purchasePremium()" class="w-full mb-2 btn-gold py-2 text-sm rounded-lg"><i class="fab fa-whatsapp mr-1"></i>Premium'a Yükselt</button>` : ''}<button onclick="openApiKeyModal()" class="w-full mb-2 text-gold text-xs border border-gold/30 py-1 rounded-lg"><i class="fab fa-google mr-1"></i>Gemini API Anahtarı</button><button onclick="handleLogout()" class="w-full px-4 py-2 text-sm text-red-400 border border-red-400/30 rounded-xl hover:bg-red-400/10">Çıkış Yap</button></div></aside>`; }
+        function renderSidebar() { return `<aside class="fixed left-0 top-0 h-full w-72 bg-[#0a0f2c] shadow-2xl z-20 overflow-y-auto border-r border-[#1e2556] p-6"><div class="flex items-center gap-3 mb-8"><div class="bg-gold w-10 h-10 rounded-xl flex items-center justify-center"><i class="fas fa-chart-line text-white"></i></div><h1 class="text-2xl font-bold text-gold">FinTech</h1></div><nav class="space-y-1">${[{ id: 'dashboard', icon: 'fa-chart-pie', label: 'Yönetim Paneli' },{ id: 'investments', icon: 'fa-chart-line', label: 'Yatırımlar' },{ id: 'fire', icon: 'fa-fire', label: 'FIRE Planlayıcı' },{ id: 'digitalmarket', icon: 'fa-store', label: 'Dijital Market' },{ id: 'advisory', icon: 'fa-users', label: 'Danışmanlık' },{ id: 'pricing', icon: 'fa-tag', label: 'Paketler' }].map(item => `<div onclick="navigateTo('${item.id}')" class="sidebar-link flex items-center gap-3 px-4 py-3 ${currentPage === item.id ? 'active-page' : 'text-gray-400'}"><i class="fas ${item.icon} w-5"></i><span>${item.label}</span></div>`).join('')}</nav><div class="absolute bottom-0 left-0 right-0 p-6 border-t border-[#1e2556]"><div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-gold flex items-center justify-center"><span class="font-bold text-[#0a0f2c]">${currentUser?.name?.[0]}</span></div><div><p class="font-medium text-white">${currentUser?.name}</p><p class="text-xs text-gold">${currentUser?.paid ? 'Premium Üye' : (currentUser?.role === 'admin' ? 'Kurucu & CEO' : 'Basic Üye')}</p></div></div>${!isPremium() && currentUser?.role !== 'admin' ? `<button onclick="purchasePremium()" class="w-full mb-2 btn-gold py-2 text-sm rounded-lg"><i class="fab fa-whatsapp mr-1"></i>Premium'a Yükselt</button>` : ''}<button onclick="handleLogout()" class="w-full px-4 py-2 text-sm text-red-400 border border-red-400/30 rounded-xl hover:bg-red-400/10">Çıkış Yap</button></div></aside>`; }
         
         function renderDashboard() {
             let netWorth = calculateNetWorth();
@@ -251,7 +238,7 @@
         
         function renderAdvisory() {
             return `<div class="card p-6 mb-6"><h3 class="font-semibold text-gold text-lg mb-4">Danışmanlık Hizmetleri (WhatsApp)</h3><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">${consultingServices.map(s => `<a href="https://wa.me/905418660202?text=${encodeURIComponent(s.whatsapp)}" target="_blank" class="p-4 bg-gold-light rounded-xl text-center hover:bg-gold/20 transition"><i class="fas ${s.icon} text-3xl text-gold mb-2"></i><p class="font-semibold text-white text-sm">${s.name}</p><p class="text-gold text-xs">${s.price}</p><p class="text-gray-500 text-xs mt-1">${s.desc}</p></a>`).join('')}</div></div>
-            <div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">🤖 Gemini Yapay Zeka Asistanı</h3><div id="chatMessages" class="h-64 overflow-y-auto mb-4 p-3 bg-[#0f1338] rounded-xl"><div class="mb-3"><div class="bg-gold-light rounded-lg p-3 inline-block"><p class="text-sm text-gold">🤖 Merhaba! Gemini AI finansal asistanıyım. Yatırım, FIRE, borç yönetimi hakkında sorular sorabilirsiniz.</p><p class="text-xs text-gray-500 mt-1">API anahtarınızı profil menüsünden ekleyin.</p></div></div></div><div class="flex gap-2"><input type="text" id="chatInput" placeholder="Gemini AI'ya sorunuzu yazın..." class="flex-1 px-4 py-2 rounded-xl"><button id="sendChat" class="px-4 py-2 bg-gold text-[#0a0f2c] rounded-xl font-semibold"><i class="fab fa-google mr-2"></i>Gemini'ye Sor</button></div></div>`;
+            <div class="card p-6"><h3 class="font-semibold text-gold text-lg mb-4">🤖 Yapay Zeka Finansal Asistan (Offline)</h3><div id="chatMessages" class="h-64 overflow-y-auto mb-4 p-3 bg-[#0f1338] rounded-xl"><div class="mb-3"><div class="bg-gold-light rounded-lg p-3 inline-block"><p class="text-sm text-gold">🤖 Merhaba! FinTech AI finansal asistanıyım. Yatırım, FIRE, borç yönetimi, tasarruf, enflasyon ve pasif gelir hakkında sorular sorabilirsiniz. (İnternet gerekmez)</p></div></div></div><div class="flex gap-2"><input type="text" id="chatInput" placeholder="Sorunuzu yazın..." class="flex-1 px-4 py-2 rounded-xl"><button id="sendChat" class="px-4 py-2 bg-gold text-[#0a0f2c] rounded-xl font-semibold"><i class="fas fa-robot mr-2"></i>AI'ya Sor</button></div></div>`;
         }
         
         function renderPricing() { return `<div class="grid grid-cols-1 md:grid-cols-3 gap-6">${pricingPlans.map(p => `<div class="card p-8 text-center ${p.popular ? 'border-2 border-gold relative' : ''}">${p.popular ? '<div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gold text-[#0a0f2c] px-3 py-1 rounded-full text-xs font-bold">Popüler</div>' : ''}<h3 class="text-2xl font-bold text-gold">${p.name}</h3><p class="text-4xl font-bold text-white mt-4">${p.price === 0 ? '₺0' : formatMoney(p.price)}<span class="text-base">${p.price !== 0 ? '/ay' : ''}</span></p><ul class="mt-6 space-y-2 text-left">${p.features.map(f => `<li class="text-sm text-gray-300"><i class="fas fa-check text-gold mr-2"></i>${f}</li>`).join('')}</ul><a href="https://wa.me/905418660202?text=${encodeURIComponent(p.whatsapp)}" target="_blank" class="mt-8 w-full py-2 border-2 border-gold text-gold rounded-lg inline-block hover:bg-gold hover:text-[#0a0f2c] transition text-center">WhatsApp ile Başla</a></div>`).join('')}</div>`; }
@@ -260,7 +247,7 @@
         
         async function renderApp() {
             if (!currentUser) { document.getElementById('root').innerHTML = renderAuth(); document.getElementById('loginForm')?.addEventListener('submit', (e) => { e.preventDefault(); if(handleLogin(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value)) renderApp(); else alert('Hatalı giriş!'); }); return; }
-            let mainContent = `<div class="flex min-h-screen"><div>${renderSidebar()}</div><main class="flex-1 ml-72 p-8"><div class="max-w-7xl mx-auto animate-fade-in"><div class="text-center mb-4"><p class="text-gold text-sm tracking-wider">🤖 YAPAY ZEKA DESTEKLİ FİNANSAL YÖNETİM WEB UYGULAMASI | GEMINI AI</p></div>${currentPage === 'dashboard' ? renderDashboard() : currentPage === 'investments' ? renderInvestments() : currentPage === 'fire' ? renderFire() : currentPage === 'digitalmarket' ? renderDigitalMarket() : currentPage === 'advisory' ? renderAdvisory() : renderPricing()}${renderFooter()}</div></main></div>`;
+            let mainContent = `<div class="flex min-h-screen"><div>${renderSidebar()}</div><main class="flex-1 ml-72 p-8"><div class="max-w-7xl mx-auto animate-fade-in"><div class="text-center mb-4"><p class="text-gold text-sm tracking-wider">🤖 YAPAY ZEKA DESTEKLİ FİNANSAL YÖNETİM WEB UYGULAMASI | OFFLINE AI</p></div>${currentPage === 'dashboard' ? renderDashboard() : currentPage === 'investments' ? renderInvestments() : currentPage === 'fire' ? renderFire() : currentPage === 'digitalmarket' ? renderDigitalMarket() : currentPage === 'advisory' ? renderAdvisory() : renderPricing()}${renderFooter()}</div></main></div>`;
             document.getElementById('root').innerHTML = mainContent;
             if(currentPage === 'fire'){ 
                 document.getElementById('updateFireBtn')?.addEventListener('click',()=>{ 
@@ -276,7 +263,21 @@
                 }); 
             }
             if(currentPage === 'advisory'){
-                document.getElementById('sendChat')?.addEventListener('click', async () => { let input = document.getElementById('chatInput'); let msg = input.value.trim(); if(!msg) return; let chatDiv = document.getElementById('chatMessages'); chatDiv.innerHTML += `<div class="mb-3 text-right"><div class="bg-gold rounded-lg p-3 inline-block"><p class="text-sm text-[#0a0f2c]">${msg}</p></div></div><div class="mb-3"><div class="bg-gold-light rounded-lg p-3 inline-block"><p class="text-sm text-gold">🤖 <i class="fas fa-spinner fa-spin"></i> Gemini yanıtlıyor...</p></div></div>`; chatDiv.scrollTop = chatDiv.scrollHeight; let reply = await askGemini(msg); chatDiv.removeChild(chatDiv.lastChild); chatDiv.innerHTML += `<div class="mb-3"><div class="bg-gold-light rounded-lg p-3 inline-block"><p class="text-sm text-gold">🤖 ${reply}</p></div></div>`; chatDiv.scrollTop = chatDiv.scrollHeight; input.value = ''; });
+                document.getElementById('sendChat')?.addEventListener('click', () => { 
+                    let input = document.getElementById('chatInput'); 
+                    let msg = input.value.trim(); 
+                    if(!msg) return; 
+                    let chatDiv = document.getElementById('chatMessages'); 
+                    chatDiv.innerHTML += `<div class="mb-3 text-right"><div class="bg-gold rounded-lg p-3 inline-block"><p class="text-sm text-[#0a0f2c]">${msg}</p></div></div><div class="mb-3"><div class="bg-gold-light rounded-lg p-3 inline-block"><p class="text-sm text-gold">🤖 <i class="fas fa-spinner fa-spin"></i> AI yanıtlıyor...</p></div></div>`; 
+                    chatDiv.scrollTop = chatDiv.scrollHeight; 
+                    setTimeout(() => { 
+                        let reply = getOfflineAIResponse(msg); 
+                        chatDiv.removeChild(chatDiv.lastChild); 
+                        chatDiv.innerHTML += `<div class="mb-3"><div class="bg-gold-light rounded-lg p-3 inline-block"><p class="text-sm text-gold">🤖 ${reply}</p></div></div>`; 
+                        chatDiv.scrollTop = chatDiv.scrollHeight; 
+                    }, 500); 
+                    input.value = ''; 
+                });
             }
         }
         
